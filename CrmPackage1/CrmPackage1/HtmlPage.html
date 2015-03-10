@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+        .left {
+            float: left;
+            width: 20%;
+            border: 1px solid black;
+            min-height: 50px;
+        }
+
+        .mid {
+            float: left;
+            width: 30%;
+            border: 1px solid black;
+            min-height: 50px;
+            text-align: center;
+        }
+
+        .right {
+            float: right;
+            width: 18%;
+            border: 1px solid black;
+            min-height: 50px;
+            overflow-y: auto;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        ul {
+            line-height: 15px;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        li {
+            color: red;
+        }
+    </style>
+
+    <script src="../Script/CustomGrid.js"></script>
+    <script src="../Script/JqGrid.js"></script>
+    <script src="../Script/jquery_1.4.4.min.js"></script>
+    <script src="../Script/jquery_ui.js"></script>
+    <script src="../Script/jquery.confirm.js"></script>
+</head>
+<body>
+    <div class="left">
+
+    </div><div class="mid">
+              <table id="notesGrid">
+                  <tr>
+                      <td></td>
+                  </tr>
+              </table>
+    </div>
+
+    <div class="right"></div>
+</body>
+</html>
