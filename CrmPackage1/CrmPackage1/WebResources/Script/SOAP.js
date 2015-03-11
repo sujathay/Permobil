@@ -1,10 +1,10 @@
-/// <reference path="c360.Common.js" />
+/// <reference path="Permobil.Common.js" />
 
-if (typeof (c360) == "undefined") {
-    c360 = { __namespace: true };
+if (typeof (Permobil) == "undefined") {
+    Permobil = { __namespace: true };
 }
 
-c360.SOAP = {
+Permobil.SOAP = {
     __namespace: true,
     ExecuteFetchXML: function (sFetchXml, successCallback, errorCallback) {
         /// <summary>Execute a FetchXml request. (result is the response XML)</summary> 
@@ -37,7 +37,7 @@ c360.SOAP = {
 
         request += '</s:Body></s:Envelope>';
 
-        c360.SOAP.ExecuteSoap(request, successCallback, errorCallback);
+        Permobil.SOAP.ExecuteSoap(request, successCallback, errorCallback);
 
     },
 
@@ -85,10 +85,10 @@ c360.SOAP = {
             requestMain += "  </s:Body>";
             requestMain += "</s:Envelope>";
 
-            c360.SOAP.ExecuteSoap(requestMain, successCallback, errorCallback);
+            Permobil.SOAP.ExecuteSoap(requestMain, successCallback, errorCallback);
         }
         catch (e) {
-            c360.Common.handleError(e);
+            Permobil.Common.handleError(e);
         }
     },
 
@@ -99,7 +99,7 @@ c360.SOAP = {
         /// <param name="errorCallback" type="function">Fires when an error occurs. Error Object</param>
         var req = new XMLHttpRequest();
 
-        req.open("POST", c360.Common.getClientUrl() + "/XRMServices/2011/Organization.svc/web", true);
+        req.open("POST", Permobil.Common.getClientUrl() + "/XRMServices/2011/Organization.svc/web", true);
         req.setRequestHeader("Accept", "application/xml, text/xml, */*");
         req.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
         req.setRequestHeader("SOAPAction", "http://schemas.microsoft.com/xrm/2011/Contracts/Services/IOrganizationService/Execute");
@@ -111,7 +111,7 @@ c360.SOAP = {
                     { successCallback(req.responseXML); }
                 }
                 else {
-                    errorCallback(c360.SOAP.DisplayFault(req));
+                    errorCallback(Permobil.SOAP.DisplayFault(req));
                 }
             }
         };
@@ -168,11 +168,11 @@ c360.SOAP = {
             request += '</s:Body>';
             request += '</s:Envelope>';
 
-            c360.SOAP.ExecuteSoap(request, successCallback, errorCallback);
+            Permobil.SOAP.ExecuteSoap(request, successCallback, errorCallback);
 
         }
         catch (e) {
-            c360.Common.handleError(e);
+            Permobil.Common.handleError(e);
         }
     }
 };

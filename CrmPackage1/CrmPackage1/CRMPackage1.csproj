@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="WebResources\CSS" />
     <Folder Include="WebResources\Script" />
     <Folder Include="WebResources\Web Page %28HTML%29\" />
     <RegisterPlugin Include="RegisterFile.crmregister">
@@ -46,6 +47,26 @@
     <Folder Include="WebResources" />
   </ItemGroup>
   <ItemGroup>
+    <CRMWebResource Include="WebResources\CSS\jquery-ui.css">
+      <DisplayName>jquery_ui.css</DisplayName>
+      <UniqueName>permobil_/Css/jquery_ui.css</UniqueName>
+      <WebResourceType>CascadingStylesheet</WebResourceType>
+    </CRMWebResource>
+    <CRMWebResource Include="WebResources\CSS\jquery_ui_1.7.3.custom.css">
+      <DisplayName>jquery_ui_1.7.3.custom.css</DisplayName>
+      <UniqueName>permobil_/css/jquery_ui_1.7.3.custom.css</UniqueName>
+      <WebResourceType>CascadingStylesheet</WebResourceType>
+    </CRMWebResource>
+    <CRMWebResource Include="WebResources\CSS\NoteManager.css">
+      <DisplayName>NoteManager.css</DisplayName>
+      <UniqueName>permobil_/Css/NoteManager.css</UniqueName>
+      <WebResourceType>CascadingStylesheet</WebResourceType>
+    </CRMWebResource>
+    <CRMWebResource Include="WebResources\CSS\redmondTheme.css">
+      <DisplayName>redmondTheme.css</DisplayName>
+      <UniqueName>permobil_/Css/redmondTheme.css</UniqueName>
+      <WebResourceType>CascadingStylesheet</WebResourceType>
+    </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\Common.js">
       <DisplayName>Common.js</DisplayName>
       <UniqueName>permobil_/js/Common.js</UniqueName>
@@ -96,9 +117,19 @@
       <UniqueName>permobil_/js/MetaDataService.js</UniqueName>
       <WebResourceType>Script</WebResourceType>
     </CRMWebResource>
+    <CRMWebResource Include="WebResources\Script\MOdata.js">
+      <DisplayName>MOdata.js</DisplayName>
+      <UniqueName>permobil_/js/MOdata.js</UniqueName>
+      <WebResourceType>Script</WebResourceType>
+    </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\OData.js">
       <DisplayName>OData.js</DisplayName>
       <UniqueName>permobil_/js/OData.js</UniqueName>
+      <WebResourceType>Script</WebResourceType>
+    </CRMWebResource>
+    <CRMWebResource Include="WebResources\Script\Permobil_settings.js">
+      <DisplayName>Permobil_settings.js</DisplayName>
+      <UniqueName>permobil_/js/Permobil_settings.js</UniqueName>
       <WebResourceType>Script</WebResourceType>
     </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\SOAP.js">

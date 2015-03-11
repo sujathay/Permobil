@@ -1,10 +1,10 @@
 ﻿/// <reference path="XrmPageTemplate.js" />
 
-if (typeof (c360) == "undefined") {
-    c360 = { __namespace: true };
+if (typeof (Permobil) == "undefined") {
+    Permobil = { __namespace: true };
 }
 
-c360.Common = {
+Permobil.Common = {
     __namespace: true,
     context: function () {
         ///<summary>Private function to the context object.</summary>
@@ -32,13 +32,13 @@ c360.Common = {
     handleError: function (e) {
         var defaultMessage = "Unexpected Error occured\n\nMessage:";
         try {
-            c360.Logging.c360Logger.error(e);
-            alert(c360.LocalizationController.GetLocalization("UnexpectedErrorOccured", defaultMessage) + e.message);
+           
+            alert(  e.message);
         }
         catch (e) {
-            alert(c360.LocalizationController.GetLocalization("UnexpectedErrorOccured", defaultMessage));
+            alert(e);
         }
-        c360.BusyIndicator.Hide();
+        Permobil.BusyIndicator.Hide();
     },
     xmlEncode: function (input) {
         if (input == null) {
@@ -70,7 +70,7 @@ c360.Common = {
         return encodedXml;
     }
 };
-c360.BusyIndicator = {
+Permobil.BusyIndicator = {
     _namespace: true,
     Show: function () {
         if (document.getElementById('msgDiv') == undefined) {
@@ -101,13 +101,13 @@ c360.BusyIndicator = {
     }
 };
 
-c360.LocalizationController = {};
-c360.LocalizationController.LanguageDictionary = null;
-c360.LocalizationController.SetLocalization = function (source, languageFileUrl, callback, defaultLanguage) {
+Permobil.LocalizationController = {};
+Permobil.LocalizationController.LanguageDictionary = null;
+Permobil.LocalizationController.SetLocalization = function (source, languageFileUrl, callback, defaultLanguage) {
     //read xml and put into dictionary   
     try {
         var filePath = "";
-        var userLanguage = defaultLanguage ? "1033" : c360.Common.context().getUserLcid();
+        var userLanguage = defaultLanguage ? "1033" : Permobil.Common.context().getUserLcid();
         if (languageFileUrl) {
             filePath = languageFileUrl + userLanguage + "_" + source + ".xml";
         } else {
@@ -127,11 +127,11 @@ c360.LocalizationController.SetLocalization = function (source, languageFileUrl,
         });
     } catch (ex) {
         alert("error while reading language xml. Description - " + ex.Description);
-        c360.Common.handleError(ex);
+        Permobil.Common.handleError(ex);
     }
     function OnError(source, languageFileUrl, callback, response) {
         if (response.readyState == 4 && response.status == 404) {
-            c360.LocalizationController.SetLocalization(source, languageFileUrl, callback, true);
+            Permobil.LocalizationController.SetLocalization(source, languageFileUrl, callback, true);
         }
         else {
             alert("Error");
@@ -143,39 +143,39 @@ c360.LocalizationController.SetLocalization = function (source, languageFileUrl,
             $(xml).find("Token").each(function () {
                 dictionary[$(this).attr('key')] = $(this).attr('value');
             });
-            c360.LocalizationController.LanguageDictionary = dictionary;
+            Permobil.LocalizationController.LanguageDictionary = dictionary;
         } catch (ex) {
-            c360.Common.handleError(ex);
+            Permobil.Common.handleError(ex);
         }
     }
 }
 
-c360.LocalizationController.GetLocalization = function (key, defaultValue) {
+Permobil.LocalizationController.GetLocalization = function (key, defaultValue) {
     try {
-        if (!c360.LocalizationController.LanguageDictionary) return defaultValue || key;
-        return c360.LocalizationController.LanguageDictionary[key] ? c360.LocalizationController.LanguageDictionary[key] : defaultValue;
+        if (!Permobil.LocalizationController.LanguageDictionary) return defaultValue || key;
+        return Permobil.LocalizationController.LanguageDictionary[key] ? Permobil.LocalizationController.LanguageDictionary[key] : defaultValue;
 
     } catch (ex) {
-        c360.Common.handleError(ex);
+        Permobil.Common.handleError(ex);
     }
 },
 
-c360.LocalizationController.GetLocalizedHtmlLabels = function () {
+Permobil.LocalizationController.GetLocalizedHtmlLabels = function () {
     try {
         $(".localizedLabel").each(function (index, value) {
             var id = $(this).attr('id');
             if (id != undefined) {
                 if ($(this).prop('nodeName') == "INPUT") {
-                    var label = c360.LocalizationController.GetLocalization(id);
+                    var label = Permobil.LocalizationController.GetLocalization(id);
                     $(this).val(label);
                 }
                 else {
-                    $(this).html(c360.LocalizationController.GetLocalization(id));
+                    $(this).html(Permobil.LocalizationController.GetLocalization(id));
                 }
             }
         });
     } catch (ex) {
-        c360.Common.handleError(ex);
+        Permobil.Common.handleError(ex);
     }
 }
 
@@ -189,7 +189,7 @@ String.format = function () {
     return s;
 }
 
-c360.Lightbox = {
+Permobil.Lightbox = {
     _namespace: true,
     Show: function () {
         var width = $(window).width() + 'px';

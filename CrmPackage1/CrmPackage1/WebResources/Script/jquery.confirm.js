@@ -21,7 +21,7 @@
         var markup = [
 			'<div id="confirmOverlay">',
 			'<div id="confirmBox">',
-			'<div id="confirmClose"><img src="/WebResources/c360_/img/CloseDialog.png" alt="X"/></div>',
+			'<div id="confirmClose"><img src="/WebResources/Permobil_/img/CloseDialog.png" alt="X"/></div>',
 			'<h1>', params.title, '</h1>',
 			'<p>', params.message, '</p>',
 			'<div id="confirmButtons">',

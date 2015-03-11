@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmPackage1", "CrmPackage1\CrmPackage1.csproj", "{FB862938-B7DE-4C72-BAB0-6C03FE4F886C}"
+Project("{88A30576-7583-4F75-8136-5EFD2C14ADFF}") = "CrmPackage1", "CrmPackage1\CrmPackage1.csproj", "{FB862938-B7DE-4C72-BAB0-6C03FE4F886C}"
 EndProject
 Global
 	GlobalSection(CRMSolutionProperties) = preSolution

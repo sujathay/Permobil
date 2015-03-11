@@ -17,13 +17,14 @@ Permobil.CRMMetaDataService.RetrieveEntity = function (entityName, CallBackSucce
         CallbackError(error);
     }
 
-    if (typeof (Permobil.CRMMetaDataService.EntityDict[entityName]) == "undefined") {
-        //c360.CRMMetaDataService.EntityDict[entityLogicalName] = new c360.CRMMetaDataService.EntityDict();
+    if (typeof (Permobil.CRMMetaDataService.EntityDict[entityName]) == "undefined") { 
 
-        c360.Metadata.RetrieveEntity(c360.Metadata.EntityFilters.Entity | c360.Metadata.EntityFilters.Attributes, entityName, null, false, RetrieveEntity_Success, RetrieveEntity_Error);
+        Permobil.Metadata.RetrieveEntity(Permobil.Metadata.EntityFilters.Entity | Permobil.Metadata.EntityFilters.Attributes, entityName, null, false, RetrieveEntity_Success, RetrieveEntity_Error);
 
     } else {
         CallBackSuccess(Permobil.CRMMetaDataService.EntityDict[entityName]);
     }
 }
+
+
  

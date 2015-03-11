@@ -1,322 +1,349 @@
-// =====================================================================
-//  This file has been adapted from the Microsoft Dynamics CRM REST code samples.
-//
-//  This source code is intended only as a supplement to Microsoft
-//  Development Tools and/or on-line documentation.  See these other
-//  materials for detailed information regarding Microsoft code samples.
-//
-//  THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-// =====================================================================
-/// <reference path="c360.Common.js" />
+/**
+* OData client
+* Requires: common-lib.js
+* Example usage:
+* var contacts = nho.odata.res("ContactSet").get();
+* var contact = nho.odata.res("ContactSet", guid).get();
+* var location = nho.odata.res("ContactSet", guid).res("AppointmentSet").top(1).select("Location").get();
+*
+* Asynchronous calls also possible:
+* nho.odata.res("ContactSet").get(function(contacts) {
+*     // do stuff
+* });
+*/
+(function (context) {
 
-if (typeof (c360) == "undefined") {
-    c360 = { __namespace: true };
-}
-
-c360.OData = {
-    __namespace: true,
-    isAsynchronous: true,
-    _oDataPath: function () {
-        ///<summary>Private function to return the path to the ODATA endpoint.</summary>
-        ///<returns>String</returns>
-        return c360.Common.getClientUrl() + "/XRMServices/2011/OrganizationData.svc/";
-    },
-    _errorHandler: function (req) {
-        ///<summary>Private function return an Error object to the errorCallback</summary>
-        ///<param name="req" type="XMLHttpRequest">The XMLHttpRequest response that returned an error.</param>
-        ///<returns>Error</returns>
-        //Error descriptions come from http://support.microsoft.com/kb/193625
-        if (req.status == 12029) {
-            return new Error("The attempt to connect to the server failed.");
-        }
-        if (req.status == 12007) {
-            return new Error("The server name could not be resolved.");
+    function _od() {
+        var _url = RealServerUrl() + "/XRMServices/2011/OrganizationData.svc";
+        var _resourcePath = "";
+        var _queryPath = "";
+        var _generateLazyLoaders = true;
+        function _lazy(lazy) {
+            _generateLazyLoaders = lazy;
+            return {
+                res: _res
+            };
         }
 
-        var errorText = "";
-
-        try {
-            errorText = JSON.parse(req.responseText).error.message.value;
-        }
-        catch (e) {
-            errorText = req.responseText;
-        }
-
-        return new Error("Error : " + req.status + ": " + req.statusText + ": " + errorText);
-    },
-    handleError: function (e) {
-        alert("An unexpected error occurred.\n\nMessage: " + e.message + "\n\nStack: " + e.stack);
-    },
-    _dateReviver: function (key, value) {
-        ///<summary>Private function to convert matching string values to Date objects.</summary>
-        ///<param name="key" type="String">The key used to identify the object property</param>
-        ///<param name="value" type="String">The string value representing a date</param>
-        var a;
-
-        if (typeof value === 'string') {
-            a = /Date\(([-+]?\d+)\)/.exec(value);
-            if (a) {
-                return new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+        function _res(resource, id) {
+            var operations = {
+                res: _res,
+                get: _get,
+                select: _select,
+                top: _top,
+                orderby: _orderby,
+                filter: _filter,
+                create: _create,
+                update: _update,
+                remove: _delete,
+                addLoad: _addLoad
+            };
+            if (id) {
+                resource += "(guid'" + _braces(id) + "')";
             }
-        }
-        return value;
-    },
-    _parameterCheck: function (parameter, message) {
-        ///<summary>Private function used to check whether required parameters are null or undefined</summary>
-        ///<param name="parameter" type="Object">The parameter to check;</param>
-        ///<param name="message" type="String">The error message text to include when the error is thrown.</param>
-        if ((typeof parameter === "undefined") || parameter === null) {
-            throw new Error(message);
-        }
-    },
-    _stringParameterCheck: function (parameter, message) {
-        ///<summary>Private function used to check whether required parameters are null or undefined</summary>
-        ///<param name="parameter" type="String">The string parameter to check;</param>
-        ///<param name="message" type="String">The error message text to include when the error is thrown.</param>
-        if (typeof parameter != "string") {
-            throw new Error(message);
-        }
-    },
-    _callbackParameterCheck: function (callbackParameter, message) {
-        ///<summary>Private function used to check whether required callback parameters are functions</summary>
-        ///<param name="callbackParameter" type="Function">The callback parameter to check;</param>
-        ///<param name="message" type="String">The error message text to include when the error is thrown.</param>
-        if (typeof callbackParameter != "function") {
-            throw new Error(message);
-        }
-    },
-    _sendRequest: function (action, url, object, successCallback, errorCallback, onComplete) {
-        ///<summary>Private function used to send all </summary>
-        ///<param name="callbackParameter" type="Function">The callback parameter to check;</param>
-        ///<param name="action" type="String">The action to take.  Valid values are create, update, delete, retrieve, retrievemultiple, associate and disassociate.</param>
-        ///<param name="url" type="String">The URL to access.  This function will prepend the server URL and the oData end point.</param>
-        ///<param name="object" type="Object">Optional JavaScript object with properties corresponding to the Schema name of entity attributes that are valid for the indicated operation.</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called with a successfull response.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        ///<param name="onComplete" type="Function">Optional. See retrieveMultiple for description.</param>
-        action = action.toLowerCase();
-
-        var verb = "POST";
-        var method = null;
-
-        switch (action) {
-            case "retrieve":
-            case "retrievemultiple":
-                verb = "GET";
-                break;
-            case "delete":
-            case "disassociate":
-                method = "DELETE";
-                break;
-            case "update":
-                method = "MERGE";
-                break;
+            _resourcePath += "/" + resource;
+            return operations;
         }
 
-        var req = new XMLHttpRequest();
-
-        req.open(verb, encodeURI(this._oDataPath() + url), this.isAsynchronous);
-        req.setRequestHeader("Accept", "application/json");
-        req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-        if (method != null) {
-            req.setRequestHeader("X-HTTP-Method", method);
-        }
-
-        req.onreadystatechange = function () {
-            if (this.readyState == 4 /* complete */) {
-                req.onreadystatechange = null;
-                var validStatus = new Array(200, 201, 204, 1223);
-                if (validStatus.indexOf(this.status) != -1) {
-                    switch (action) {
-                        case "retrievemultiple":
-                            var returned = JSON.parse(this.responseText, c360.OData._dateReviver).d;
-
-                            successCallback(returned.results);
-                            if (action.toLowerCase() == "retrievemultiple") {
-                                if (returned.__next != null) {
-                                    var queryOptions = returned.__next.substring((c360.OData._oDataPath() + type + "Set").length);
-
-                                    c360.OData.retrieveMultipleRecords(type, queryOptions, successCallback, errorCallback, onComplete);
-                                }
-                                else { onComplete(); }
+        function _createLazyLoaders(arr) {
+            var sets = nho.odata.sets;
+            if (!arr.push) arr = [arr];
+            var i = 0; len = arr.length;
+            var obj;
+            for (; i < len; i++) {
+                obj = arr[i];
+                var guid = obj.__metadata.uri;
+                guid = guid.substring(guid.indexOf("(guid"));
+                for (var j in obj) {
+                    if (obj[j] != undefined && typeof obj[j] == "object") {
+                        if (obj[j].hasOwnProperty("__metadata") && obj[j].__metadata.hasOwnProperty("type")) {
+                            if (obj[j].__metadata.type == "Microsoft.Crm.Sdk.Data.Services.EntityReference" && obj[j].Id != undefined) {
+                                (function () {
+                                    var prop = j;
+                                    var id = obj[prop].Id;
+                                    var logicalName = obj[prop]["LogicalName"];
+                                    var resource = sets[logicalName] != undefined ? sets[logicalName] : logicalName;
+                                    resource = resource + "Set";
+                                    var methodName = prop;
+                                    if (methodName.endsWith("Id")) methodName = methodName.substring(0, methodName.length - 2);
+                                    obj[methodName] = function () {
+                                        var odata = new nho.odata();
+                                        return odata.res(resource, id).get();
+                                    };
+                                    obj[methodName].id = id;
+                                })();
+                            } else if (obj[j].__metadata.type == "Microsoft.Crm.Sdk.Data.Services.EntityReference") {
+                                (function () {
+                                    var methodName = j;
+                                    obj[methodName] = function () { return null; };
+                                })();
                             }
-                            break;
-                        case "create":
-                        case "retrieve":
-                            successCallback(JSON.parse(this.responseText, c360.OData._dateReviver).d);
-                            break;
-                        default:
-                            successCallback();
-                            break;
+                        } else if (obj[j].hasOwnProperty("__deferred")) {
+                            (function () {
+                                var prop = j;
+                                var url = obj[prop].__deferred.uri;
+                                var start = url.indexOf("OrganizationData.svc") + 20;
+                                url = _url + url.substring(start);
+                                var methodName = prop;
+                                if (methodName.endsWith("Id")) methodName = methodName.substring(0, methodName.length - 2);
+                                obj[methodName] = function (callback) {
+                                    var _od = new nho.odata();
+                                    return _od.execUrl(callback, url);
+                                };
+                            })();
+                        }
+                    } else if (obj[j] != undefined && typeof obj[j] == "string" && obj[j].indexOf("/Date(") != -1) {
+                        obj[j] = new Date(
+                           parseInt(obj[j].substring(6, obj[j].length - 1), 10)
+                        );
                     }
-
-
-
-                }
-                else {
-                    errorCallback(c360.OData._errorHandler(this));
                 }
             }
+        }
+
+        function _get(yield, __nextUrl) {
+            var url = __nextUrl || _url + _resourcePath + (_queryPath.length > 0 ? "?" + _queryPath.substring(1) : "");
+            var results;
+            var options = {
+                type: "GET",
+                beforeSend: function (req) { req.setRequestHeader("Accept", "application/json"); },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url,
+                error: function (xhr, status, ex) {
+                    alert(ex);
+                }
+            };
+            var res = [];
+            if (yield) {
+                options.success = function (data) {
+                    if (!data.d["results"]) {
+                        res = data.d;
+                    } else {
+                        res = Arrays(res).addAll(data.d.results);
+                    }
+                    if (data.d.__next) {
+                        (function () {
+                            var nextUrl = data.d.__next;
+                            var start = nextUrl.indexOf("OrganizationData.svc") + 20;
+                            nextUrl = _url + nextUrl.substring(start);
+                            res.next = function (callback) {
+                                var _od = new nho.odata();
+                                return _od.execUrl(callback, nextUrl);
+                            };
+                        })();
+                    }
+                    if (_generateLazyLoaders) _createLazyLoaders(res);
+                    yield(res);
+                    _generateLazyLoaders = true;
+                };
+            } else {
+                options.async = false;
+                options.success = function (data) {
+                    var res = data.d.results || data.d;
+                    results = res;
+                };
+            }
+            $.ajax(options);
+            _destroy();
+            if (results != undefined && _generateLazyLoaders)
+                _createLazyLoaders(results);
+            if (!yield) _generateLazyLoaders = true;
+            return results;
+        }
+        function _save(object, operation, yield) {
+            /*if (object.push) {
+                var batchMediaType = "multipart/mixed";
+                var boundary = "batch_" + hex16() + "-" + hex16() + "-" + hex16();
+                var data = "";
+                Arryas(object).each(function(item) {
+                    data += "\r\n--" + boundary + "\r\n";
+                    var changeSetBoundary = "changeset_" + hex16() + "-" + hex16() + "-" + hex16();
+                    data += "Content-Type: multipart/mixed; boundary=" + changeSetBoundary + "\r\n";
+                });
+                data += "\r\n--" + boundary + "--\r\n";
+            }
+            */
+            for (var i in object) {
+                // remove lazy loaders if present.
+                if (typeof object[i] == "function") delete object[i];
+            }
+            var data = JSON.stringify(object);
+            var url = _url + _resourcePath + (_queryPath.length > 0 ? "?" + _queryPath.substring(1) : "");
+            var options = {
+                type: "POST",
+                beforeSend: function (req) {
+                    req.setRequestHeader("Accept", "application/json");
+                    if (operation == "update") {
+                        req.setRequestHeader("X-HTTP-Method", "MERGE");
+                    } else if (operation == "delete") {
+                        req.setRequestHeader("X-HTTP-Method", "DELETE");
+                    }
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url,
+                data: data,
+                error: function (xhr, status, ex) {
+                    alert(ex);
+                }
+            };
+            var results;
+            if (yield) {
+                options.success = function (data) {
+                    yield(data);
+                };
+            } else {
+                options.async = false;
+                options.success = function (data) {
+                    results = data.d.results || data.d;
+                };
+            }
+            $.ajax(options);
+            _destroy();
+            return results;
+        }
+        function _create(object, yield) {
+            return _save(object, "create", yield);
+        }
+        function _update(object, yield) {
+            return _save(object, "update", yield);
+        }
+        function _delete(object, yield) {
+            return _save(object, "delete", yield);
+        }
+        function _top(top) {
+            if (_queryPath.indexOf("$top=") == -1) _queryPath += "&$top=" + top;
+            return {
+                get: _get,
+                select: _select,
+                orderby: _orderby,
+                filter: _filter,
+                addLoad: _addLoad
+            };
+        }
+        function _select(fields) {
+            if (_queryPath.indexOf("$select=") == -1) _queryPath += "&$select=" + fields;
+            return {
+                get: _get,
+                top: _top,
+                orderby: _orderby,
+                filter: _filter,
+                addLoad: _addLoad
+            };
+        }
+        function _addLoad(fields) {
+            if (_queryPath.indexOf("$expand=") == -1) _queryPath += "&$expand=" + fields;
+            return {
+                get: _get,
+                top: _top,
+                orderby: _orderby,
+                filter: _filter,
+                select: _select
+            };
+        }
+        function _orderby(fields) {
+            if (_queryPath.indexOf("$orderby=") == -1) {
+                _queryPath += "&$orderby=" + fields;
+                return {
+                    get: _get,
+                    top: _top,
+                    select: _select,
+                    asc: _asc,
+                    desc: _desc,
+                    filter: _filter,
+                    addLoad: _addLoad
+                };
+            } else {
+                return {
+                    get: _get,
+                    top: _top,
+                    select: _select,
+                    filter: _filter,
+                    addLoad: _addLoad
+                };
+            }
+        }
+        function _asc() {
+            _queryPath += " asc";
+            return {
+                get: _get,
+                top: _top,
+                select: _select,
+                orderby: _orderby,
+                filter: _filter,
+                addLoad: _addLoad
+            };
+        }
+        function _desc() {
+            _queryPath += " desc";
+            return {
+                get: _get,
+                top: _top,
+                select: _select,
+                orderby: _orderby,
+                filter: _filter,
+                addLoad: _addLoad
+            };
+        }
+        function _filter(value) {
+            if (_queryPath.indexOf("$filter=") == -1) {
+                _queryPath += "&$filter=" + value;
+            }
+            return {
+                get: _get,
+                top: _top,
+                orderby: _orderby,
+                select: _select,
+                addLoad: _addLoad
+            };
+        }
+        function _destroy() {
+            _resourcePath = "";
+            _queryPath = "";
+        }
+
+        function _defer(callback) {
+            var loader = function (items) {
+                var _items = [];
+                var handler;
+                handler = function (items) {
+                    _items = Arrays(_items).addAll(items);
+                    if (items.hasOwnProperty("next")) {
+                        items.next(handler);
+                    } else {
+                        callback(_items);
+                    }
+                };
+                handler(items);
+            };
+            return loader;
+        }
+
+        function _braces(id) {
+            if (id.indexOf("{") == -1) return "{" + id + "}";
+            else return id;
+        }
+
+        this.lazy = _lazy;
+        this.res = _res;
+        this.destroy = _destroy;
+        this.execUrl = _get;
+        this.defer = _defer;
+        this.addLoad = _addLoad;
+        this.debrace = function (id) {
+            return id.replace("{", "").replace("}", "");
         };
-
-        if (object != null && object != "") {
-            req.send(JSON.stringify(object));
-        } else {
-            req.send();
-        }
-    },
-    createRecord: function (object, type, successCallback, errorCallback) {
-        ///<summary>Sends an asynchronous request to create a new record.</summary>
-        ///<param name="object" type="Object">A JavaScript object with properties corresponding to the Schema name of entity attributes that are valid for create operations.</param>
-        ///<param name="type" type="String">The Schema Name of the Entity type record to create. For an Account record, use "Account"</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called by a successful response. This function can accept the returned record as a parameter.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        this._parameterCheck(object, "c360.OData.createRecord requires the object parameter.");
-        this._stringParameterCheck(type, "c360.OData.createRecord requires the type parameter is a string.");
-        this._callbackParameterCheck(successCallback, "c360.OData.createRecord requires the successCallback is a function.");
-        this._callbackParameterCheck(errorCallback, "c360.OData.createRecord requires the errorCallback is a function.");
-
-        var url = type + "Set";
-
-        this._sendRequest("create", url, object, successCallback, errorCallback);
-    },
-    retrieveRecord: function (id, type, select, expand, successCallback, errorCallback) {
-        ///<summary>Sends an asynchronous request to retrieve a record.</summary>
-        ///<param name="id" type="String">A String representing the GUID value for the record to retrieve.</param>
-        ///<param name="type" type="String">The Schema Name of the Entity type record to retrieve. For an Account record, use "Account"</param>
-        ///<param name="select" type="String">A String representing the $select OData System Query Option to control which attributes will be returned. This is a comma separated list of Attribute names that are valid for retrieve. If null all properties for the record will be returned</param>
-        ///<param name="expand" type="String">A String representing the $expand OData System Query Option value to control which related records are also returned. This is a comma separated list of of up to 6 entity relationship names. If null no expanded related records will be returned.</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called by a successful response. This function must accept the returned record as a parameter.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        this._stringParameterCheck(id, "c360.OData.retrieveRecord requires the id parameter is a string.");
-        this._stringParameterCheck(type, "c360.OData.retrieveRecord requires the type parameter is a string.");
-        if (select != null)
-            this._stringParameterCheck(select, "c360.OData.retrieveRecord requires the select parameter is a string.");
-        if (expand != null)
-            this._stringParameterCheck(expand, "c360.OData.retrieveRecord requires the expand parameter is a string.");
-        this._callbackParameterCheck(successCallback, "c360.OData.retrieveRecord requires the successCallback parameter is a function.");
-        this._callbackParameterCheck(errorCallback, "c360.OData.retrieveRecord requires the errorCallback parameter is a function.");
-
-        var systemQueryOptions = "";
-
-        if (select != null || expand != null) {
-            systemQueryOptions = "?";
-            if (select != null) {
-                var selectString = "$select=" + select;
-                if (expand != null) {
-                    selectString = selectString + "," + expand;
-                }
-                systemQueryOptions = systemQueryOptions + selectString;
-            }
-            if (expand != null) {
-                systemQueryOptions = systemQueryOptions + "&$expand=" + expand;
-            }
-        }
-
-        var url = type + "Set(guid'" + id + "')" + systemQueryOptions;
-
-        this._sendRequest("retrieve", url, null, successCallback, errorCallback);
-    },
-    updateRecord: function (id, object, type, successCallback, errorCallback) {
-        ///<summary>Sends an asynchronous request to update a record.</summary>
-        ///<param name="id" type="String">A String representing the GUID value for the record to retrieve.</param>
-        ///<param name="object" type="Object">A JavaScript object with properties corresponding to the Schema Names for entity attributes that are valid for update operations.</param>
-        ///<param name="type" type="String">The Schema Name of the Entity type record to retrieve. For an Account record, use "Account"</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called by a successful response. Nothing will be returned to this function.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        this._stringParameterCheck(id, "c360.OData.updateRecord requires the id parameter.");
-        this._parameterCheck(object, "c360.OData.updateRecord requires the object parameter.");
-        this._stringParameterCheck(type, "c360.OData.updateRecord requires the type parameter.");
-        this._callbackParameterCheck(successCallback, "c360.OData.updateRecord requires the successCallback is a function.");
-        this._callbackParameterCheck(errorCallback, "c360.OData.updateRecord requires the errorCallback is a function.");
-
-        var url = type + "Set(guid'" + id + "')";
-
-        this._sendRequest("update", url, object, successCallback, errorCallback);
-    },
-    deleteRecord: function (id, type, successCallback, errorCallback) {
-        ///<summary>Sends an asynchronous request to delete a record.</summary>
-        ///<param name="id" type="String">A String representing the GUID value for the record to delete.</param>
-        ///<param name="type" type="String">The Schema Name of the Entity type record to delete. For an Account record, use "Account"</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called by a successful response. Nothing will be returned to this function.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        this._stringParameterCheck(id, "c360.OData.deleteRecord requires the id parameter.");
-        this._stringParameterCheck(type, "c360.OData.deleteRecord requires the type parameter.");
-        this._callbackParameterCheck(successCallback, "c360.OData.deleteRecord requires the successCallback is a function.");
-        this._callbackParameterCheck(errorCallback, "c360.OData.deleteRecord requires the errorCallback is a function.");
-
-        var url = type + "Set(guid'" + id + "')";
-
-        this._sendRequest("delete", url, null, successCallback, errorCallback);
-    },
-    retrieveMultipleRecords: function (type, options, successCallback, errorCallback, onComplete) {
-        ///<summary>Sends an asynchronous request to retrieve records.</summary>
-        ///<param name="type" type="String">The Schema Name of the Entity type record to retrieve. For an Account record, use "Account"</param>
-        ///<param name="options" type="String">A String representing the OData System Query Options to control the data returned</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called for each page of records returned. Each page is 50 records. If you expect that more than one page of records will be returned, this function should loop through the results and push the records into an array outside of the function. Use the OnComplete event handler to know when all the records have been processed.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        ///<param name="OnComplete" type="Function">The function that will be called when all the requested records have been returned. No parameters are passed to this function.</param>
-        this._stringParameterCheck(type, "c360.OData.retrieveMultipleRecords requires the type parameter is a string.");
-        if (options != null)
-            this._stringParameterCheck(options, "c360.OData.retrieveMultipleRecords requires the options parameter is a string.");
-        this._callbackParameterCheck(successCallback, "c360.OData.retrieveMultipleRecords requires the successCallback parameter is a function.");
-        this._callbackParameterCheck(errorCallback, "c360.OData.retrieveMultipleRecords requires the errorCallback parameter is a function.");
-        this._callbackParameterCheck(onComplete, "c360.OData.retrieveMultipleRecords requires the OnComplete parameter is a function.");
-
-        var optionsString = '';
-        if (options != null) {
-            if (options.charAt(0) != "?") {
-                optionsString = "?" + options;
-            }
-            else { optionsString = options; }
-        }
-
-        var url = type + "Set" + optionsString;
-
-        this._sendRequest("retrievemultiple", url, null, successCallback, errorCallback, onComplete);
-    },
-    associateRecords: function (parentId, parentType, relationshipName, childId, childType, successCallback, errorCallback) {
-        ///<param name="parentId" type="String">The Id of the record to be the parent record in the relationship</param>
-        ///<param name="parentType" type="String">The Schema Name of the Entity type for the parent record. For an Account record, use "Account"</param>
-        ///<param name="relationshipName" type="String">The Schema Name of the Entity Relationship to use to associate the records. To associate account records as a Parent account, use "Referencedaccount_parent_account"</param>
-        ///<param name="childId" type="String">The Id of the record to be the child record in the relationship</param>
-        ///<param name="childType" type="String">The Schema Name of the Entity type for the child record. For an Account record, use "Account"</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called by a successful response. Nothing will be returned to this function.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        this._stringParameterCheck(parentId, "c360.OData.associateRecords requires the parentId parameter is a string.");
-        this._stringParameterCheck(parentType, "c360.OData.associateRecords requires the parentType parameter is a string.");
-        this._stringParameterCheck(relationshipName, "c360.OData.associateRecords requires the relationshipName parameter is a string.");
-        this._stringParameterCheck(childId, "c360.OData.associateRecords requires the childId parameter is a string.");
-        this._stringParameterCheck(childType, "c360.OData.associateRecords requires the childType parameter is a string.");
-        this._callbackParameterCheck(successCallback, "c360.OData.associateRecords requires the successCallback parameter is a function.");
-        this._callbackParameterCheck(errorCallback, "c360.OData.associateRecords requires the errorCallback parameter is a function.");
-
-        var childEntityReference = {}
-        childEntityReference.uri = this._oDataPath() + "/" + childType + "Set(guid'" + childId + "')";
-
-        var url = parentType + "Set(guid'" + parentId + "')/$links/" + relationshipName;
-
-        this._sendRequest("associate", url, childEntityReference, successCallback, errorCallback);
-    },
-    disassociateRecords: function (parentId, parentType, relationshipName, childId, successCallback, errorCallback) {
-        this._stringParameterCheck(parentId, "c360.OData.disassociateRecords requires the parentId parameter is a string.");
-        ///<param name="parentId" type="String">The Id of the record to be the parent record in the relationship</param>
-        ///<param name="parentType" type="String">The Schema Name of the Entity type for the parent record. For an Account record, use "Account"</param>
-        ///<param name="relationshipName" type="String">The Schema Name of the Entity Relationship to use to disassociate the records. To disassociate account records as a Parent account, use "Referencedaccount_parent_account"</param>
-        ///<param name="childId" type="String">The Id of the record to be disassociated as the child record in the relationship</param>
-        ///<param name="successCallback" type="Function">The function that will be passed through and be called by a successful response. Nothing will be returned to this function.</param>
-        ///<param name="errorCallback" type="Function">The function that will be passed through and be called by a failed response. This function must accept an Error object as a parameter.</param>
-        this._stringParameterCheck(parentType, "c360.OData.disassociateRecords requires the parentType parameter is a string.");
-        this._stringParameterCheck(relationshipName, "c360.OData.disassociateRecords requires the relationshipName parameter is a string.");
-        this._stringParameterCheck(childId, "c360.OData.disassociateRecords requires the childId parameter is a string.");
-        this._callbackParameterCheck(successCallback, "c360.OData.disassociateRecords requires the successCallback parameter is a function.");
-        this._callbackParameterCheck(errorCallback, "c360.OData.disassociateRecords requires the errorCallback parameter is a function.");
-
-        var url = parentType + "Set(guid'" + parentId + "')/$links/" + relationshipName + "(guid'" + childId + "')";
-
-        this._sendRequest("disassociate", url, null, successCallback, errorCallback);
+        this.braces = _braces;
     }
-};
+
+    if (!context["nho"]) context.nho = {};
+    context.nho.odata = _od;
+    context.nho.odata.sets = {
+        businessunit: "BusinessUnit",
+        systemuser: "SystemUser",
+        sn_medlemsorganisation: "SN_medlemsorganisation",
+        sn_kollektivavtal: "Sn_Kollektivavtal",
+        account: "Account"
+    };
+})(this);

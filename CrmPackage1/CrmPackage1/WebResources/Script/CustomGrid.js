@@ -19,17 +19,18 @@ Permobil.CustomGrid = {
             rowDoubleClickHandler: null,
             RefreshGridHandler: null,
             CaptionText: null,
-            customActionObj: null,
+            customActionObj: '',
             fetchQuery: '',
-            gridCompleted: null
+            gridCompleted: null,
+            onRowDelete: null
         }
         var settings = $.extend(defaults, options);
         settings.PagerId = 'pgr_' + settings.gridID;
-        var actionbar = null;
-        // action bar generation
-        var d = $('<div>');
-        d.attr({ 'class': 'box2' });
         if (settings.customActionObj) {
+            var actionbar = null;
+            // action bar generation
+            var d = $('<div>');
+            d.attr({ 'class': 'box2' });
             $.each(settings.customActionObj, function (index, value) {
                 actionbar = $('<input>');
                 actionbar.attr({
@@ -53,10 +54,11 @@ Permobil.CustomGrid = {
                     );
                 d.append(actionbar);
                 //refresh button adding
-                $("#" + settings.gridID).parent().prepend($("<div>", { "class": "c360-REO-GridArea" }));
+                $("#" + settings.gridID).parent().prepend($("<div>", { "class": "Permobil-REO-GridArea" }));
             });
+
+            $("#" + settings.gridID).parent().prepend(d);
         }
-        $("#" + settings.gridID).parent().prepend(d);
         var pager = $('<div>');
         pager.attr({ 'id': settings.PagerId });
         $("#" + settings.gridID).parent().parent().append(pager);
@@ -65,12 +67,33 @@ Permobil.CustomGrid = {
         var myData = settings.dataSource;
         grid.jqGrid('GridUnload'); // to clear off the grid if it already exist.
         grid = $("#" + settings.gridID); // Note: this is required after gridUnload as the table(container element) is recreated. Hence, the reference needs to be updated.
+        function imageFormatter(cellValue, options, cell) {
+            try {
+                var imgName = '';
+                var altName = '';
+                switch (cellValue) {
+                    case '555860001':
+                        imgName = altName = 'info';
+                        break;
+                    case '555860002':
+                        imgName = altName = 'warning';
+                        break;
+                    case '555860003':
+                        imgName = altName = 'alert';
+                        break;
+                    default:
 
+                }
+                return ' <img alt="' + altName + '" src="../img/' + imgName + '.gif" />';
+            } catch (e) {
+                Permobil.RE.Common.LogException(e);
+            }
+        }
 
         Permobil.TextFormatter = function (cellValue, options, cell) {
             try {
                 var text = '';
-                if (cell['c360_expires'] == 'false') {
+                if (cell['Permobil_expires'] == 'false') {
                     text = "Never";
                 }
                 else {
@@ -78,7 +101,7 @@ Permobil.CustomGrid = {
                 }
                 return '<span>' + text + '</span>';
             } catch (e) {
-                //Permobil.RE.Common.LogException(e);
+                Permobil.RE.Common.LogException(e);
             }
         }
 
@@ -124,12 +147,22 @@ Permobil.CustomGrid = {
             recordpos: 'left',
             loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } }
         });
-        grid.jqGrid('navGrid', '#' + settings.PagerId, {
-            caption: "", title: "Reload Grid", buttonicon: "ui-icon-refresh",
-            onClickButton: function () {
-                alert('"Refresh" button is clicked!');
-            }
-        });
+
+        //grid.jqGrid('navGrid', '#' + settings.PagerId, { add: false, edit: false, del: false, search: false, refresh: true },
+        //                            {}, {}, {}, { multipleSearch: false, multipleGroup: false, showQuery: false });
+
+        grid.jqGrid('navGrid', '#' + settings.PagerId,   { edit: false, add: false, del: true },
+             {
+                 url:settings.onRowDelete($("#" + settings.gridID)),
+                 //url: '@Url.Action("DeleteSelectedTransactionAttachment", "Home")',
+                 serializeDelData: function (postData) {
+                     return {
+                         attachmentId: JSON.stringify(postData),
+                         attachmentName: attachmentName,
+                         transactionId: selectedRowId
+                     }
+                 }
+             });
 
     },
     SelectedRowValue: function (fieldName) {
@@ -146,34 +179,34 @@ Permobil.CustomGrid = {
     SelectedRowID: function () {
         return $("#" + Permobil.CustomGrid.GridID).jqGrid('getGridParam', 'selrow');
     },
-    //ConfirmationBox: function (confirmAction, cancelAction) {
+    ConfirmationBox: function (confirmAction, cancelAction) {
 
-    //   // Permobil.ConfirmBox.insertCss();
-    //    $.confirm({
-    //        'title': Permobil.LocalizationController.GetLocalization("ConfirmDeletion"),
-    //        'message': Permobil.LocalizationController.GetLocalization("DeleteAlertConfirmationMsg"),
-    //        'buttons': {
-    //            'Delete': {
-    //                'class': 'blue',
-    //                'text': Permobil.LocalizationController.GetLocalization("OK"),
-    //                'action': function () {
-    //                    $('#Activateconfirm').attr('disabled', 'disabled').css('color', 'rgb(161, 163, 161)').css('border', '1px solid rgb(172, 172, 172)');
-    //                    $('#confirmBox p').html('<div id="progressbar"><div class="progress-label"></div></div>');
-    //                    $.confirm.hide();
-    //                    confirmAction();
-    //                }
-    //            },
-    //            'Cancel': {
-    //                'class': 'gray',
-    //                'text': Permobil.LocalizationController.GetLocalization("Cancel"),
-    //                'action': function () {
-    //                    $.confirm.hide();
-    //                    cancelAction();
-    //                } // Nothing to do in this case. You can as well omit the action property.
-    //            }
-    //        }
-    //    });
-    //},
+        Permobil.ConfirmBox.insertCss();
+        $.confirm({
+            'title': Permobil.LocalizationController.GetLocalization("ConfirmDeletion"),
+            'message': Permobil.LocalizationController.GetLocalization("DeleteAlertConfirmationMsg"),
+            'buttons': {
+                'Delete': {
+                    'class': 'blue',
+                    'text': Permobil.LocalizationController.GetLocalization("OK"),
+                    'action': function () {
+                        $('#Activateconfirm').attr('disabled', 'disabled').css('color', 'rgb(161, 163, 161)').css('border', '1px solid rgb(172, 172, 172)');
+                        $('#confirmBox p').html('<div id="progressbar"><div class="progress-label"></div></div>');
+                        $.confirm.hide();
+                        confirmAction();
+                    }
+                },
+                'Cancel': {
+                    'class': 'gray',
+                    'text': Permobil.LocalizationController.GetLocalization("Cancel"),
+                    'action': function () {
+                        $.confirm.hide();
+                        cancelAction();
+                    } // Nothing to do in this case. You can as well omit the action property.
+                }
+            }
+        });
+    },
     Load: function ()
     { }
 }

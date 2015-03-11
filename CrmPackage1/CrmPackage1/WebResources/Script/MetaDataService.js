@@ -1,22 +1,7 @@
-// =====================================================================
-//  This file is part of the Microsoft Dynamics CRM c360 code samples.
-//
-//  Copyright (C) Microsoft Corporation.  All rights reserved.
-//
-//  This source code is intended only as a supplement to Microsoft
-//  Development Tools and/or on-line documentation.  See these other
-//  materials for detailed information regarding Microsoft code samples.
-//
-//  THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-// =====================================================================
+ 
 
-//<snippetc360.Metadata.js>
-
-c360 = window.c360 || { __namespace: true };
-c360.Metadata = c360.Metadata || { __namespace: true };
+Permobil = window.Permobil || { __namespace: true };
+Permobil.Metadata = Permobil.Metadata || { __namespace: true };
 
 (function () {
 
@@ -27,7 +12,7 @@ c360.Metadata = c360.Metadata || { __namespace: true };
         ///</summary>
         ///<returns>entityMetadataCollection</returns>
         ///<param name="EntityFilters" type="Number">
-        /// c360.Metadata.EntityFilters provides an enumeration for the filters available to filter which data is retrieved.
+        /// Permobil.Metadata.EntityFilters provides an enumeration for the filters available to filter which data is retrieved.
         /// Include only those elements of the entity you want to retrieve. Retrieving all parts of all entitities may take significant time.
         ///</param>
         ///<param name="RetrieveAsIfPublished" type="Boolean">
@@ -45,13 +30,13 @@ c360.Metadata = c360.Metadata || { __namespace: true };
         /// An Object that will be passed through to as the second parameter to the successCallBack.
         ///</param>
         if ((typeof EntityFilters != "number") || (EntityFilters < 1 || EntityFilters > 15))
-        { throw new Error("c360.Metadata.RetrieveAllEntities EntityFilters must be a c360.Metadata.EntityFilters value."); }
+        { throw new Error("Permobil.Metadata.RetrieveAllEntities EntityFilters must be a Permobil.Metadata.EntityFilters value."); }
         if (typeof RetrieveAsIfPublished != "boolean")
-        { throw new Error("c360.Metadata.RetrieveAllEntities RetrieveAsIfPublished must be a boolean value."); }
+        { throw new Error("Permobil.Metadata.RetrieveAllEntities RetrieveAsIfPublished must be a boolean value."); }
         if (typeof successCallBack != "function")
-        { throw new Error("c360.Metadata.RetrieveAllEntities successCallBack must be a function."); }
+        { throw new Error("Permobil.Metadata.RetrieveAllEntities successCallBack must be a function."); }
         if (typeof errorCallBack != "function")
-        { throw new Error("c360.Metadata.RetrieveAllEntities errorCallBack must be a function."); }
+        { throw new Error("Permobil.Metadata.RetrieveAllEntities errorCallBack must be a function."); }
 
         var entityFiltersValue = _evaluateEntityFilters(EntityFilters);
 
@@ -116,7 +101,7 @@ c360.Metadata = c360.Metadata || { __namespace: true };
         ///</summary>
         ///<returns>entityMetadata</returns>
         ///<param name="EntityFilters" type="Number">
-        /// c360.Metadata.EntityFilters provides an enumeration for the filters available to filter which data is retrieved.
+        /// Permobil.Metadata.EntityFilters provides an enumeration for the filters available to filter which data is retrieved.
         /// Include only those elements of the entity you want to retrieve. Retrieving all parts of all entitities may take significant time.
         ///</param>
         ///<param name="LogicalName" optional="true" type="String">
@@ -142,25 +127,25 @@ c360.Metadata = c360.Metadata || { __namespace: true };
         try
         {
             if ((typeof EntityFilters != "number") || (EntityFilters < 1 || EntityFilters > 15))
-            { throw new Error("c360.Metadata.RetrieveEntity EntityFilters must be a c360.Metadata.EntityFilters value."); }
+            { throw new Error("Permobil.Metadata.RetrieveEntity EntityFilters must be a Permobil.Metadata.EntityFilters value."); }
             if (LogicalName == null && MetadataId == null) {
-                throw new Error("c360.Metadata.RetrieveEntity requires either the LogicalName or MetadataId parameter not be null.");
+                throw new Error("Permobil.Metadata.RetrieveEntity requires either the LogicalName or MetadataId parameter not be null.");
             }
             if (LogicalName != null) {
                 if (typeof LogicalName != "string")
-                { throw new Error("c360.Metadata.RetrieveEntity LogicalName must be a string value."); }
+                { throw new Error("Permobil.Metadata.RetrieveEntity LogicalName must be a string value."); }
                 MetadataId = "00000000-0000-0000-0000-000000000000";
             }
             if (MetadataId != null && LogicalName == null) {
                 if (typeof MetadataId != "string")
-                { throw new Error("c360.Metadata.RetrieveEntity MetadataId must be a string value."); }
+                { throw new Error("Permobil.Metadata.RetrieveEntity MetadataId must be a string value."); }
             }
             if (typeof RetrieveAsIfPublished != "boolean")
-            { throw new Error("c360.Metadata.RetrieveEntity RetrieveAsIfPublished must be a boolean value."); }
+            { throw new Error("Permobil.Metadata.RetrieveEntity RetrieveAsIfPublished must be a boolean value."); }
             if (typeof successCallBack != "function")
-            { throw new Error("c360.Metadata.RetrieveEntity successCallBack must be a function."); }
+            { throw new Error("Permobil.Metadata.RetrieveEntity successCallBack must be a function."); }
             if (typeof errorCallBack != "function")
-            { throw new Error("c360.Metadata.RetrieveEntity errorCallBack must be a function."); }
+            { throw new Error("Permobil.Metadata.RetrieveEntity errorCallBack must be a function."); }
             var entityFiltersValue = _evaluateEntityFilters(EntityFilters);
 
             var entityLogicalNameValueNode = "";
@@ -259,31 +244,31 @@ c360.Metadata = c360.Metadata || { __namespace: true };
         /// An Object that will be passed through to as the second parameter to the successCallBack.
         ///</param>
         if (EntityLogicalName == null && LogicalName == null && MetadataId == null) {
-            throw new Error("c360.Metadata.RetrieveAttribute requires either the EntityLogicalName and LogicalName  parameters or the MetadataId parameter not be null.");
+            throw new Error("Permobil.Metadata.RetrieveAttribute requires either the EntityLogicalName and LogicalName  parameters or the MetadataId parameter not be null.");
         }
         if (MetadataId != null && EntityLogicalName == null && LogicalName == null) {
             if (typeof MetadataId != "string")
-            { throw new Error("c360.Metadata.RetrieveEntity MetadataId must be a string value."); }
+            { throw new Error("Permobil.Metadata.RetrieveEntity MetadataId must be a string value."); }
         }
         else
         { MetadataId = "00000000-0000-0000-0000-000000000000"; }
         if (EntityLogicalName != null) {
             if (typeof EntityLogicalName != "string") {
-                { throw new Error("c360.Metadata.RetrieveAttribute EntityLogicalName must be a string value."); }
+                { throw new Error("Permobil.Metadata.RetrieveAttribute EntityLogicalName must be a string value."); }
             }
         }
         if (LogicalName != null) {
             if (typeof LogicalName != "string") {
-                { throw new Error("c360.Metadata.RetrieveAttribute LogicalName must be a string value."); }
+                { throw new Error("Permobil.Metadata.RetrieveAttribute LogicalName must be a string value."); }
             }
 
         }
         if (typeof RetrieveAsIfPublished != "boolean")
-        { throw new Error("c360.Metadata.RetrieveAttribute RetrieveAsIfPublished must be a boolean value."); }
+        { throw new Error("Permobil.Metadata.RetrieveAttribute RetrieveAsIfPublished must be a boolean value."); }
         if (typeof successCallBack != "function")
-        { throw new Error("c360.Metadata.RetrieveAttribute successCallBack must be a function."); }
+        { throw new Error("Permobil.Metadata.RetrieveAttribute successCallBack must be a function."); }
         if (typeof errorCallBack != "function")
-        { throw new Error("c360.Metadata.RetrieveAttribute errorCallBack must be a function."); }
+        { throw new Error("Permobil.Metadata.RetrieveAttribute errorCallBack must be a function."); }
 
         var entityLogicalNameValueNode;
         if (EntityLogicalName == null) {
@@ -359,7 +344,7 @@ c360.Metadata = c360.Metadata || { __namespace: true };
     };
 
     this.EntityFilters = function () {
-        /// <summary>c360.Metadata.EntityFilters enum summary</summary>
+        /// <summary>Permobil.Metadata.EntityFilters enum summary</summary>
         /// <field name="Default" type="Number" static="true">enum field summary for Default</field>
         /// <field name="Entity" type="Number" static="true">enum field summary for Entity</field>
         /// <field name="Attributes" type="Number" static="true">enum field summary for Attributes</field>
@@ -459,7 +444,7 @@ c360.Metadata = c360.Metadata || { __namespace: true };
     };
 
     function _getUrl() {
-        var url = c360.Common.getClientUrl();
+        var url = Permobil.Common.getClientUrl();
         return url;
     };
 
@@ -744,11 +729,11 @@ c360.Metadata = c360.Metadata || { __namespace: true };
         return XmlEncode;
     };
 
-}).call(c360.Metadata);
+}).call(Permobil.Metadata);
 
-//c360.Metadata.EntityFilters
+//Permobil.Metadata.EntityFilters
 // this enum is written this way to enable Visual Studio IntelliSense
-c360.Metadata.EntityFilters.prototype = {
+Permobil.Metadata.EntityFilters.prototype = {
     Default: 1,
     Entity: 1,
     Attributes: 2,
@@ -756,14 +741,14 @@ c360.Metadata.EntityFilters.prototype = {
     Relationships: 8,
     All: 15
 };
-c360.Metadata.EntityFilters.Default = 1;
-c360.Metadata.EntityFilters.Entity = 1;
-c360.Metadata.EntityFilters.Attributes = 2;
-c360.Metadata.EntityFilters.Privileges = 4;
-c360.Metadata.EntityFilters.Relationships = 8;
-c360.Metadata.EntityFilters.All = 15;
-c360.Metadata.EntityFilters.__enum = true;
-c360.Metadata.EntityFilters.__flags = true;
+Permobil.Metadata.EntityFilters.Default = 1;
+Permobil.Metadata.EntityFilters.Entity = 1;
+Permobil.Metadata.EntityFilters.Attributes = 2;
+Permobil.Metadata.EntityFilters.Privileges = 4;
+Permobil.Metadata.EntityFilters.Relationships = 8;
+Permobil.Metadata.EntityFilters.All = 15;
+Permobil.Metadata.EntityFilters.__enum = true;
+Permobil.Metadata.EntityFilters.__flags = true;
 
 
-//</snippetc360.Metadata.js>
+//</snippetPermobil.Metadata.js>
