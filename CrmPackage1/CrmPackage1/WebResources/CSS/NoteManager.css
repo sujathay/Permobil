@@ -1,66 +1,104 @@
 ﻿.upload-container {
-	width:590px;
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:12px;
+    width: 590px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
-.upload-container p {
-	color:#777;
+
+    .upload-container p {
+        color: #777;
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .ui-widget-content .jqgrow .ui-row-ltr {
+        color: #333;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 0;
+        padding: 0;
+    }
+
+.timer {
+    font-size: 12px;
+    color: #777;
 }
+
 .file-upload {
-	/*border:1px solid #a4c6fd;*/
-	background:#ffffff;
+    /*border:1px solid #a4c6fd;*/
+    background: #ffffff;
 }
-.file-upload input {
-	border: 1px solid #a4c6fd;
-	margin: 10px;
-	padding: 5px;
-	width: 560px;
+
+    .file-upload input {
+        margin: 10px;
+        padding: 5px;
+        width: 560px;
+    }
+
+.transparent {
+    background-color: transparent;
+    border: 0px solid;
+    cursor: pointer;
 }
+
+.file-upload input:focus {
+    border: 1px solid #a4c6fd;
+}
+
+.MainInput input:focus {
+    border: 1px solid #a4c6fd;
+}
+
 .file-upload h1 {
-	border-bottom: 1px dotted #cccccc;
-	color: #766e6e;
-	font-size: 12px;
-	margin: 0 10px;
-	padding: 10px 0;
+    border-bottom: 1px dotted #cccccc;
+    color: #766e6e;
+    font-size: 12px;
+    margin: 0 10px;
+    padding: 10px 0;
 }
+
 .file-attachment {
-	background:#f8f8f8;
-	margin:10px 0 0;
-	bottom:0;
-	width:100%;
-	height:30px;
-	padding:10px 0;
+    background: #f8f8f8;
+    margin: 10px 0 0;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    padding: 10px 0;
 }
+
 .attach-btn {
-	background:#fff;
-	border:1px solid #c6c6c6;
-	text-align:center;
-	margin-top: 5px;
-	cursor:pointer;
+    background: #fff;
+    border: 1px solid #c6c6c6;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
 }
+
 .file-attachment img {
-	float:left;
-	padding: 0 10px;
+    float: left;
+    padding: 0 10px;
 }
+
 .submit-btn {
-	background:#fff;
-	border:1px solid #c6c6c6;
-	text-align:center;
-	margin-top: 5px;
-	float:right;
-	margin-right: 10px;
-	cursor:pointer;
+    background: #fff;
+    border: 1px solid #c6c6c6;
+    text-align: center;
+    margin-top: 5px;
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
 }
+
 .yj-balloon-arrow-border {
-	border-bottom-color: #a4c6fd;
-	border-bottom: 7px solid #a4c6fd;
-	border-left: 7px dashed transparent;
-	border-right: 7px dashed transparent;
-	left: 18px;
-	top: 1px;
-	font-size: 0;
-	height: 0;
-	line-height: 0;
-	position: absolute;
-	width: 0;
+    border-bottom-color: #a4c6fd;
+    border-bottom: 7px solid #a4c6fd;
+    border-left: 7px dashed transparent;
+    border-right: 7px dashed transparent;
+    left: 18px;
+    top: 1px;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    position: absolute;
+    width: 0;
 }
+.ui-jqgrid tr.ui-row-ltr td { border-bottom-style: none; border-right-style: none;}

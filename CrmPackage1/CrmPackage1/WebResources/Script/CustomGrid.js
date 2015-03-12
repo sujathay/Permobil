@@ -125,6 +125,8 @@ Permobil.CustomGrid = {
             sortorder: (settings.isDesc) ? 'desc' : 'asc',
             gridview: true,
             subGrid: false,
+            // editurl: function () { alert("testdddddddd");},
+            postData: { ajax: "1" },
             caption: settings.CaptionText,
             subGridOptions: {
                 "expandOnLoad": true
@@ -145,24 +147,25 @@ Permobil.CustomGrid = {
             height: settings.ht,
             pagerpos: 'right',
             recordpos: 'left',
-            loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } }
-        });
+            loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } },
+            onSelectRow: function (id) {
+                if (Permobil.CustomNotes.lastSelectedRow && id && id !== Permobil.CustomNotes.lastSelectedRow) {
+                    jQuery("#" + settings.gridID).restoreRow(Permobil.CustomNotes.lastSelectedRow);
+                }
+                Permobil.CustomNotes.lastSelectedRow = id;
+                jQuery("#" + settings.gridID).editRow(id,
+                    {
+                        "keys": true,
+                        "oneditfunc": function (data) { alert('editing'); return "1"; },
+                        "successfunc": function (data) { alert('success'); return "1"; },
+                        "extraparam": { '_method': 'PUT' },
+                        "aftersavefunc": function (data) { alert('after save'); return "1"; },
+                        "errorfunc": function (data) { alert('error'); console.log(data); return "1"; },
+                        "restoreAfterError": false
+                    });
 
-        //grid.jqGrid('navGrid', '#' + settings.PagerId, { add: false, edit: false, del: false, search: false, refresh: true },
-        //                            {}, {}, {}, { multipleSearch: false, multipleGroup: false, showQuery: false });
-
-        grid.jqGrid('navGrid', '#' + settings.PagerId,   { edit: false, add: false, del: true },
-             {
-                 url:settings.onRowDelete($("#" + settings.gridID)),
-                 //url: '@Url.Action("DeleteSelectedTransactionAttachment", "Home")',
-                 serializeDelData: function (postData) {
-                     return {
-                         attachmentId: JSON.stringify(postData),
-                         attachmentName: attachmentName,
-                         transactionId: selectedRowId
-                     }
-                 }
-             });
+            }
+        }); 
 
     },
     SelectedRowValue: function (fieldName) {

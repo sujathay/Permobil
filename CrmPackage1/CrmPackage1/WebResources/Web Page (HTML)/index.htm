@@ -2,51 +2,73 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-     
+
     <script src="../../ClientGlobalContext.js.aspx" type="text/javascript"></script>
     <!--<script src="../libs/jquery_1.4.4.min.js"></script>-->
-    <link href="../css/jquery_ui_1.7.3.custom.css" rel="stylesheet" type="text/css" /> 
-     <!-- <link href="../css/jquery_ui.css" rel="stylesheet" type="text/css" />-->
+    <link href="../css/jquery_ui_1.7.3.custom.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="../css/jquery_ui.css" rel="stylesheet" type="text/css" />-->
     <link href="../css/redmondTheme.css" rel="stylesheet" type="text/css" />
-     <link href="../css/NoteManager.css" rel="stylesheet" type="text/css" />
+    <link href="../css/NoteManager.css" rel="stylesheet" type="text/css" />
     <script src="../../permobil_jquery172"></script>
     <!--<script src="../../permobil_json2"></script>-->
     <script src="../libs/jquery.confirm.js"></script>
-    <script src="../libs/jquery_ui.js"></script> 
+    <script src="../libs/jquery_ui.js"></script>
     <script src="../js/Common.js"></script>
     <script src="../../permobil_ODATA"></script>
-    <script src="../js/MOdata.js"></script>
-   <!-- <script src="../../permobil_SOAP"></script>  -->
+    <script src="../js/MOdata.js"></script> 
     <script src="../libs/grid.locale_en.js" type="text/javascript"></script>
     <script src="../libs/JqGrid.js"></script>
-   <!-- <script src="../js/SOAP.js"></script>-->
+     <script src="../js/SOAP.js"></script>
     <script src="../js/Permobil_settings.js"></script>
     <script src="../js/MetaDataService.js"></script>
     <script src="../js/CRMMetaDataService.js"></script>
     <script src="../js/CustomGrid.js"></script>
     <script src="../js/CustomNotes.js"></script>
+   
 </head>
-<body> 
+
+<body>
 
     <div class="upload-container">
-  <div class=" yj-balloon-arrow-border"></div>
+        <div class=" yj-balloon-arrow-border"></div>
+
         <div class="file-upload">
-    <h1> Description </h1>
-    <input type="text" id="txtDesc"/>
-     
-  </div>
-  <div class="file-upload">
-    <h1> Title </h1>
-    <input type="text" id="txtNotesName"/>
-    <div class="file-attachment"> <img src="attach.png" />
-        <input type="file" id="txtFileName"/>
-    <!--  <button class="attach-btn">Attach</button>-->
-      <button class="submit-btn"  onclick="Permobil.CustomNotes.Save()">Done</button>
+            <h1 id="lblDesc" >Description </h1>
+            <input type="text" id="txtDesc" class="transparent" />
+
+        </div>
+        <div class="file-upload">
+            <h1  id="lblTitle">Title </h1>
+            <input type="text" id="txtNotesName" class="transparent"  />
+            <div class="file-attachment">
+                <img src="../img/attach.png" />
+                <input type="file" id="txtFileName" onchange="Permobil.CustomNotes.handleFileSelect(this)"  />
+                  <button class="attach-btn">Attach</button>
+                <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button>
+            </div>
+        </div>
+
+        <div style="margin-top:100px">
+            <table id="notesGrid">
+            </table>
+        </div>
     </div>
-  </div> 
-        <div>
-        <table id="notesGrid">
-        </table></div>
-</div>
+
+     <script >
+         $("#txtDesc").focus(function () {
+             $("#lblDesc").hide(); $("#lblTitle").show();
+         });
+         $("#txtNotesName").focus(function () {
+             $("#lblTitle").hide(); $("#lblDesc").show();
+         });
+
+         $("#txtDesc").focusout(function () {
+             $("#lblDesc").show(); $("#lblTitle").show();
+         });
+         $("#txtNotesName").focusout(function () {
+             $("#lblTitle").show(); $("#lblDesc").show();
+         });
+         
+    </script>
 </body>
 </html>

@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="WebResources\CSS" />
+    <Folder Include="WebResources\images" />
     <Folder Include="WebResources\Script" />
     <Folder Include="WebResources\Web Page %28HTML%29\" />
     <RegisterPlugin Include="RegisterFile.crmregister">
@@ -66,6 +67,11 @@
       <DisplayName>redmondTheme.css</DisplayName>
       <UniqueName>permobil_/Css/redmondTheme.css</UniqueName>
       <WebResourceType>CascadingStylesheet</WebResourceType>
+    </CRMWebResource>
+    <CRMWebResource Include="WebResources\images\attach.png">
+      <DisplayName>attach.png</DisplayName>
+      <UniqueName>permobil_/img/attach.png</UniqueName>
+      <WebResourceType>PNG</WebResourceType>
     </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\Common.js">
       <DisplayName>Common.js</DisplayName>
