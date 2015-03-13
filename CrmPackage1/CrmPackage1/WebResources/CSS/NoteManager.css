@@ -10,13 +10,13 @@
         padding: 5px 0;
     }
 
-    .ui-widget-content .jqgrow .ui-row-ltr {
-        color: #333;
-        font-size: 12px;
-        font-weight: 600;
-        margin: 0;
-        padding: 0;
-    }
+.ui-widget-content .jqgrow .ui-row-ltr {
+    color: #333;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+}
 
 .timer {
     font-size: 12px;
@@ -101,4 +101,17 @@
     position: absolute;
     width: 0;
 }
-.ui-jqgrid tr.ui-row-ltr td { border-bottom-style: none; border-right-style: none;}
+
+.ui-jqgrid tr.ui-row-ltr td {
+    border-bottom-style: none;
+    border-right-style: none;
+    height: 40px;
+}
+
+.ui-state-highlight {
+    background-color: white !important;
+}
+
+    .ui-state-highlight input:focus {
+        border: 1px solid #a4c6fd;
+    }

@@ -125,8 +125,6 @@ Permobil.CustomGrid = {
             sortorder: (settings.isDesc) ? 'desc' : 'asc',
             gridview: true,
             subGrid: false,
-            // editurl: function () { alert("testdddddddd");},
-            postData: { ajax: "1" },
             caption: settings.CaptionText,
             subGridOptions: {
                 "expandOnLoad": true
@@ -147,6 +145,7 @@ Permobil.CustomGrid = {
             height: settings.ht,
             pagerpos: 'right',
             recordpos: 'left',
+            editurl: 'clientArray',
             loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } },
             onSelectRow: function (id) {
                 if (Permobil.CustomNotes.lastSelectedRow && id && id !== Permobil.CustomNotes.lastSelectedRow) {
@@ -156,16 +155,31 @@ Permobil.CustomGrid = {
                 jQuery("#" + settings.gridID).editRow(id,
                     {
                         "keys": true,
-                        "oneditfunc": function (data) { alert('editing'); return "1"; },
-                        "successfunc": function (data) { alert('success'); return "1"; },
-                        "extraparam": { '_method': 'PUT' },
-                        "aftersavefunc": function (data) { alert('after save'); return "1"; },
+                        "oneditfunc": function (data) {
+                            // Permobil.CustomNotes.Save(data, id);
+                        },
+                         "successfunc": function (data) { alert("surdfdf"); return; },
+                       "extraparam": { '_method': 'POST' },
+                        "aftersavefunc": function (data) {
+                            Permobil.CustomNotes.UpdateNotes(data, id );
+                            return "1";
+                        },
+                        "afterEditCell": function (data) {
+                            Permobil.CustomNotes.UpdateNotes(data, id);
+                            return "1";
+                        },
                         "errorfunc": function (data) { alert('error'); console.log(data); return "1"; },
-                        "restoreAfterError": false
+                        "restoreAfterError": true
                     });
-
+                //jQuery("#" + settings.gridID).saveRow(  id,
+                //{
+                //    "keys": true,
+                //    "successfunc": function (response) {
+                //        Permobil.CustomNotes.Save(data, id);
+                //    }
+                //});
             }
-        }); 
+        });
 
     },
     SelectedRowValue: function (fieldName) {
