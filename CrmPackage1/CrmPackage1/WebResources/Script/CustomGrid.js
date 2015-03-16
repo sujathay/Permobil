@@ -148,36 +148,54 @@ Permobil.CustomGrid = {
             editurl: 'clientArray',
             loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } },
             onSelectRow: function (id) {
-                if (Permobil.CustomNotes.lastSelectedRow && id && id !== Permobil.CustomNotes.lastSelectedRow) {
-                    jQuery("#" + settings.gridID).restoreRow(Permobil.CustomNotes.lastSelectedRow);
-                }
-                Permobil.CustomNotes.lastSelectedRow = id;
-                jQuery("#" + settings.gridID).editRow(id,
-                    {
-                        "keys": true,
-                        "oneditfunc": function (data) {
-                            // Permobil.CustomNotes.Save(data, id);
+                //if (Permobil.CustomNotes.lastSelectedRow && id && id !== Permobil.CustomNotes.lastSelectedRow) {
+                //    jQuery("#" + settings.gridID).restoreRow(Permobil.CustomNotes.lastSelectedRow);
+                //}
+                //Permobil.CustomNotes.lastSelectedRow = id;
+                var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
+                if (gr != null)
+                    jQuery("#" + settings.gridID).jqGrid('editGridRow', gr, {
+                        //url: 'clientArray',
+                        height: 280, reloadAfterSubmit: false,
+                        editCaption: "Edit Notes",
+                        processData: "Saving...",
+                        closeAfterEdit: true,
+                        afterSubmit: function (id) {
+                             
                         },
-                         "successfunc": function (data) { alert("surdfdf"); return; },
-                       "extraparam": { '_method': 'POST' },
-                        "aftersavefunc": function (data) {
-                            Permobil.CustomNotes.UpdateNotes(data, id );
+                        beforeSubmit: function (id) {
+                            var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
+                            Permobil.CustomNotes.UpdateNotes(id,gr);
                             return "1";
-                        },
-                        "afterEditCell": function (data) {
-                            Permobil.CustomNotes.UpdateNotes(data, id);
-                            return "1";
-                        },
-                        "errorfunc": function (data) { alert('error'); console.log(data); return "1"; },
-                        "restoreAfterError": true
+                        }
                     });
-                //jQuery("#" + settings.gridID).saveRow(  id,
-                //{
-                //    "keys": true,
-                //    "successfunc": function (response) {
-                //        Permobil.CustomNotes.Save(data, id);
-                //    }
-                //});
+
+                //jQuery("#" + settings.gridID).editRow(id,
+                //    {
+                //        "keys": true,
+                //        "oneditfunc": null,
+                //        "successfunc": function (data) { alert("surdfdf"); return; },
+                //        "extraparam": { '_method': 'POST' },
+                //        "aftersavefunc": function (data) {
+                //            Permobil.CustomNotes.UpdateNotes(data, id);
+                //            return "1";
+                //        },
+                //        "afterSubmit": function (data) {
+                //            Permobil.CustomNotes.UpdateFile(data, id);
+                //            return "1";
+                //        },
+                //        "afterEditCell": function () { 
+                //            e = jQuery.Event("keydown");
+                //            e.keyCode = $.ui.keyCode.ENTER;
+                //            //get the edited thing
+                //            edit = $(".edit-cell > *");
+                //            edit.blur(function () {
+                //                edit.trigger(e);
+                //            });
+                //        },
+                //        "errorfunc": function (data) { alert('error'); console.log(data); return "1"; },
+                //        "restoreAfterError": true
+                //    }); 
             }
         });
 

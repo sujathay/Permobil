@@ -73,6 +73,11 @@
       <UniqueName>permobil_/img/attach.png</UniqueName>
       <WebResourceType>PNG</WebResourceType>
     </CRMWebResource>
+    <CRMWebResource Include="WebResources\Script\ajaxfileupload.js">
+      <DisplayName>ajaxfileupload.js</DisplayName>
+      <UniqueName>permobil_/libs/ajaxfileupload.js</UniqueName>
+      <WebResourceType>Script</WebResourceType>
+    </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\Common.js">
       <DisplayName>Common.js</DisplayName>
       <UniqueName>permobil_/js/Common.js</UniqueName>

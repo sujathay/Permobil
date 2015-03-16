@@ -13,6 +13,7 @@
     <!--<script src="../../permobil_json2"></script>-->
     <script src="../libs/jquery.confirm.js"></script>
     <script src="../libs/jquery_ui.js"></script>
+    <script src="../libs/ajaxfileupload.js"></script> 
     <script src="../js/Common.js"></script>
     <script src="../../permobil_ODATA"></script>
     <script src="../js/MOdata.js"></script> 
@@ -68,6 +69,16 @@
          $("#txtNotesName").focusout(function () {
              $("#lblTitle").show(); $("#lblDesc").show();
          });
+         //$(document).click(function (e) {
+         //    e.preventDefault();
+         //    //gets the element where the click event happened
+         //    var clickedElement = e.target;
+         //    //if the click event happened outside the grid 
+         //    if ($("#notesGrid").has(clickedElement).size() < 1) {
+         //        //unselect the grid row
+         //        $("#notesGrid").jqGrid("editCell", 0, 0, false);
+         //    }
+         //});
          
     </script>
 </body>
