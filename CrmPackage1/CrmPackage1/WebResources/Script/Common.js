@@ -4,7 +4,7 @@ if (typeof (Permobil) == "undefined") {
     Permobil = { __namespace: true };
 }
 
-Permobil.Common = {
+Permobil.Common  = {
     __namespace: true,
     context: function () {
         ///<summary>Private function to the context object.</summary>
@@ -39,6 +39,13 @@ Permobil.Common = {
             alert(e);
         }
         Permobil.BusyIndicator.Hide();
+    },
+    formatDate :function (d) {
+        /// <summary>Formats the Date object like 'MM/dd/yyyy'.</summary>  
+        var day = d.getDate();
+        var mon = d.getMonth();
+        var yr = d.getFullYear();
+        return ((mon + 1) < 10 ? '0' + (mon + 1) : (mon + 1)) + '/' + (day < 10 ? '0' + day : day) + '/' + yr;
     },
     xmlEncode: function (input) {
         if (input == null) {
@@ -101,83 +108,7 @@ Permobil.BusyIndicator = {
     }
 };
 
-Permobil.LocalizationController = {};
-Permobil.LocalizationController.LanguageDictionary = null;
-Permobil.LocalizationController.SetLocalization = function (source, languageFileUrl, callback, defaultLanguage) {
-    //read xml and put into dictionary   
-    try {
-        var filePath = "";
-        var userLanguage = defaultLanguage ? "1033" : Permobil.Common.context().getUserLcid();
-        if (languageFileUrl) {
-            filePath = languageFileUrl + userLanguage + "_" + source + ".xml";
-        } else {
-            filePath = "../languages/" + userLanguage + "_" + source + ".xml";
-        }
-        $.ajax({
-            type: "GET",
-            url: filePath,
-            dataType: "xml",
-            success: function (xml) {
-                parseXML(xml);
-                callback();
-            },
-            error: function (response) {
-                OnError(source, languageFileUrl, callback, response);
-            }
-        });
-    } catch (ex) {
-        alert("error while reading language xml. Description - " + ex.Description);
-        Permobil.Common.handleError(ex);
-    }
-    function OnError(source, languageFileUrl, callback, response) {
-        if (response.readyState == 4 && response.status == 404) {
-            Permobil.LocalizationController.SetLocalization(source, languageFileUrl, callback, true);
-        }
-        else {
-            alert("Error");
-        }
-    }
-    function parseXML(xml) {
-        var dictionary = {};
-        try {
-            $(xml).find("Token").each(function () {
-                dictionary[$(this).attr('key')] = $(this).attr('value');
-            });
-            Permobil.LocalizationController.LanguageDictionary = dictionary;
-        } catch (ex) {
-            Permobil.Common.handleError(ex);
-        }
-    }
-}
-
-Permobil.LocalizationController.GetLocalization = function (key, defaultValue) {
-    try {
-        if (!Permobil.LocalizationController.LanguageDictionary) return defaultValue || key;
-        return Permobil.LocalizationController.LanguageDictionary[key] ? Permobil.LocalizationController.LanguageDictionary[key] : defaultValue;
-
-    } catch (ex) {
-        Permobil.Common.handleError(ex);
-    }
-},
-
-Permobil.LocalizationController.GetLocalizedHtmlLabels = function () {
-    try {
-        $(".localizedLabel").each(function (index, value) {
-            var id = $(this).attr('id');
-            if (id != undefined) {
-                if ($(this).prop('nodeName') == "INPUT") {
-                    var label = Permobil.LocalizationController.GetLocalization(id);
-                    $(this).val(label);
-                }
-                else {
-                    $(this).html(Permobil.LocalizationController.GetLocalization(id));
-                }
-            }
-        });
-    } catch (ex) {
-        Permobil.Common.handleError(ex);
-    }
-}
+ 
 
 String.format = function () {
     var s = arguments[0];

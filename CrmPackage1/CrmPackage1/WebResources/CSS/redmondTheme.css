@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * jQuery UI CSS Framework 1.8.14
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
@@ -248,7 +248,8 @@
 }
 .ui-widget-content .ui-icon
 {
-    background-image: url(../img/ui_icons_469bdd_256x240.png);
+    /*background-image: url(../img/ui_icons_469bdd_256x240.png);*/
+    background-image: url(../img/delete.png);
 }
 .ui-widget-header .ui-icon
 {
@@ -256,11 +257,11 @@
 }
 .ui-state-default .ui-icon
 {
-    background-image: url(../img/ui_icons_6da8d5_256x240.png);
+   /*background-image: url(../img/ui_icons_6da8d5_256x240.png);*/
 }
 .ui-state-hover .ui-icon, .ui-state-focus .ui-icon
 {
-    background-image: url(../img/ui_icons_217bc0_256x240.png);
+    /*background-image: url(../img/ui_icons_217bc0_256x240.png);*/
 }
 .ui-state-active .ui-icon
 {
@@ -610,7 +611,7 @@
 }
 .ui-icon-trash
 {
-    background-position: -176px -96px;
+    /*background-position: -176px -96px;*/
 }
 .ui-icon-locked
 {

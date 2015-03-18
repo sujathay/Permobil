@@ -3,7 +3,26 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
 }
+.upload-container h2 {
+ color:#333;
+ font-size:14px;
+ font-weight:700;
+ margin:0;
+ padding:0;
+} 
 
+.watermark {
+    position: absolute;
+    opacity: 0.1;
+    font-size: 3em;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+}
+.links {
+    cursor:pointer;
+    color: #1160b7 !important;
+}
     .upload-container p {
         color: #777;
         margin: 0;
@@ -26,12 +45,14 @@
 .file-upload {
     /*border:1px solid #a4c6fd;*/
     background: #ffffff;
+   
 }
 
     .file-upload input {
         margin: 10px;
         padding: 5px;
         width: 560px;
+         font-size:11px;
     }
 
 .transparent {
@@ -51,7 +72,7 @@
 .file-upload h1 {
     border-bottom: 1px dotted #cccccc;
     color: #766e6e;
-    font-size: 12px;
+    font-size: 11px;
     margin: 0 10px;
     padding: 10px 0;
 }
@@ -62,7 +83,7 @@
     bottom: 0;
     width: 100%;
     height: 30px;
-    padding: 10px 0;
+    padding: 10px 0;font-size: 11px;
 }
 
 .attach-btn {
@@ -101,7 +122,9 @@
     position: absolute;
     width: 0;
 }
-
+.fileuploadelement {
+    font-size: 11px;
+}
 .ui-jqgrid tr.ui-row-ltr td {
     border-bottom-style: none;
     border-right-style: none;
@@ -115,3 +138,13 @@
     .ui-state-highlight input:focus {
         border: 1px solid #a4c6fd;
     }
+.ui-widget-header {
+    background:white;
+    color:black;
+}
+.ui-jqgrid { border-width: 0px; }
+.ui-state-default { border-width: 0px;
+}
+.deleteicon {
+    background-image: url(../img/delete.png);
+}

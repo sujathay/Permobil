@@ -119,6 +119,8 @@ Permobil.CustomGrid = {
                     cell: "cell"
                 }
             },
+            success:function(response){ $("#myjqgrid").jqGrid('navGrid','#Pager');
+                $("#myjqgrid").jqGrid('gridResize',{minWidth:800,maxWidth:1405,minHeight:350,maxHeight:680});},
             rowNum: settings.PageSize,
             pginput: true,
             sortname: settings.sortBy,
@@ -137,8 +139,10 @@ Permobil.CustomGrid = {
                 $("#" + subgrid_id).html(subdata);
             },
             ondblClickRow: function (rowid, iRow, iCol, e) {
-                var data = grid.getRowData(rowid);
-                settings.rowDoubleClickHandler(data);
+                if (settings.rowDoubleClickHandler) {
+                   // var data = grid.getRowData(rowid);
+                    settings.rowDoubleClickHandler(rowid);
+                }
             },
             viewrecords: true,
             width: settings.wd,
@@ -146,59 +150,38 @@ Permobil.CustomGrid = {
             pagerpos: 'right',
             recordpos: 'left',
             editurl: 'clientArray',
+            emptyrecords: "No Notes found.",
             loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } },
-            onSelectRow: function (id) {
-                //if (Permobil.CustomNotes.lastSelectedRow && id && id !== Permobil.CustomNotes.lastSelectedRow) {
-                //    jQuery("#" + settings.gridID).restoreRow(Permobil.CustomNotes.lastSelectedRow);
-                //}
-                //Permobil.CustomNotes.lastSelectedRow = id;
-                var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
-                if (gr != null)
-                    jQuery("#" + settings.gridID).jqGrid('editGridRow', gr, {
-                        //url: 'clientArray',
-                        height: 280, reloadAfterSubmit: false,
-                        editCaption: "Edit Notes",
-                        processData: "Saving...",
-                        closeAfterEdit: true,
-                        afterSubmit: function (id) {
-                             
-                        },
-                        beforeSubmit: function (id) {
-                            var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
-                            Permobil.CustomNotes.UpdateNotes(id,gr);
-                            return "1";
-                        }
-                    });
+            //onSelectRow: function (id) {
+            //    var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
+            //    if (gr != null)
+            //        jQuery("#" + settings.gridID).jqGrid('editGridRow', gr, {
+            //            height: 280, reloadAfterSubmit: false,
+            //            editCaption: "Edit Notes",
+            //            processData: "Saving...",
+            //            closeAfterEdit: true,
+            //            beforeShowForm: function (form) {
+            //                $("tr#tr_notes_desc").show();
+            //                $("tr#tr_notes_name").show();
+            //                $("tr#tr_filename").show();
+            //                $("tr#tr_formatted").hide();
 
-                //jQuery("#" + settings.gridID).editRow(id,
-                //    {
-                //        "keys": true,
-                //        "oneditfunc": null,
-                //        "successfunc": function (data) { alert("surdfdf"); return; },
-                //        "extraparam": { '_method': 'POST' },
-                //        "aftersavefunc": function (data) {
-                //            Permobil.CustomNotes.UpdateNotes(data, id);
-                //            return "1";
-                //        },
-                //        "afterSubmit": function (data) {
-                //            Permobil.CustomNotes.UpdateFile(data, id);
-                //            return "1";
-                //        },
-                //        "afterEditCell": function () { 
-                //            e = jQuery.Event("keydown");
-                //            e.keyCode = $.ui.keyCode.ENTER;
-                //            //get the edited thing
-                //            edit = $(".edit-cell > *");
-                //            edit.blur(function () {
-                //                edit.trigger(e);
-                //            });
-                //        },
-                //        "errorfunc": function (data) { alert('error'); console.log(data); return "1"; },
-                //        "restoreAfterError": true
-                //    }); 
-            }
+            //            },
+            //            afterclickPgButtons: function (whichbutton, form, rowid) {
+            //                $("tr#tr_notes_desc").show();
+            //                $("tr#tr_notes_name").show();
+            //                $("tr#tr_filename").show();
+            //                $("tr#tr_formatted").hide();
+            //            },
+            //            beforeSubmit: function (id) {
+            //                var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
+            //                Permobil.CustomNotes.UpdateNotes(id, gr);
+            //                return "1";
+            //            }
+            //        });
+            // }
         });
-
+         
     },
     SelectedRowValue: function (fieldName) {
         var rowID = $("#" + Permobil.CustomGrid.GridID).jqGrid('getGridParam', 'selrow');
@@ -216,14 +199,14 @@ Permobil.CustomGrid = {
     },
     ConfirmationBox: function (confirmAction, cancelAction) {
 
-        Permobil.ConfirmBox.insertCss();
+        //Permobil.ConfirmBox.insertCss();
         $.confirm({
-            'title': Permobil.LocalizationController.GetLocalization("ConfirmDeletion"),
-            'message': Permobil.LocalizationController.GetLocalization("DeleteAlertConfirmationMsg"),
+            'title': "ConfirmDeletion" ,
+            'message':  "Are you sure want to delte this note?" ,
             'buttons': {
                 'Delete': {
                     'class': 'blue',
-                    'text': Permobil.LocalizationController.GetLocalization("OK"),
+                    'text': "OK",
                     'action': function () {
                         $('#Activateconfirm').attr('disabled', 'disabled').css('color', 'rgb(161, 163, 161)').css('border', '1px solid rgb(172, 172, 172)');
                         $('#confirmBox p').html('<div id="progressbar"><div class="progress-label"></div></div>');
@@ -233,7 +216,7 @@ Permobil.CustomGrid = {
                 },
                 'Cancel': {
                     'class': 'gray',
-                    'text': Permobil.LocalizationController.GetLocalization("Cancel"),
+                    'text': "Cancel",
                     'action': function () {
                         $.confirm.hide();
                         cancelAction();
