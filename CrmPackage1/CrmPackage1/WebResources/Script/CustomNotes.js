@@ -40,25 +40,24 @@ Permobil.CustomNotes.Notes = function () {
     permobil_accountName: '';
 
 }
-Permobil.CustomNotes.hoverTitle=function(){
-    if (event.keyCode==46 || event.keyCode==127){ 
-        var domEvent=new Sys.UI.DomEvent(event); domEvent.stopPropagation();
+Permobil.CustomNotes.hoverTitle = function () {
+    if (event.keyCode == 46 || event.keyCode == 127) {
+        var domEvent = new Sys.UI.DomEvent(event); domEvent.stopPropagation();
     } else if (event.keyCode == 13 && event.shiftKey) {
         alert('dfd');
         return false;
     } else if (event.keyCode == 9) { alert('cancel'); }
 }
 Permobil.CustomNotes.formatGridDisplay = function (cellvalue, options, rowObject) { // format the cellvalue to new format
-    var inlineDelete = (rowObject["annotationid"] && rowObject["annotationid"].length == 36) ? ('<img id=' + rowObject["annotationid"] + '  onclick="Permobil.CustomNotes.DeleteFile(this)" src="../img/delete.png">  <br/> ' ): '<br/> ';
+    var inlineDelete = (rowObject["annotationid"] && rowObject["annotationid"].length == 36) ? ('<img id=' + rowObject["annotationid"] + '  onclick="Permobil.CustomNotes.DeleteFile(this)" src="../img/delete.png">  <br/> ') : ' ';
+    var filelink = (rowObject["annotationid"] && rowObject["annotationid"].length == 36) ? ('<a class="links" id=' + rowObject["annotationid"] + '   onclick="Permobil.CustomNotes.DownloadAttachment(this)"   target="_blank" >' + rowObject["filename"] + '</a>') : "";
     var new_formated_cellvalue = '<h2>' + rowObject["notes_name"] + '</h2> <p>' + rowObject["notes_desc"] + '</p>' +
-    '<a class="links" id=' + rowObject["annotationid"] + '   onclick="Permobil.CustomNotes.DownloadAttachment(this)"   target="_blank" >' + rowObject["filename"] + '</a>'+
-    inlineDelete+
+    filelink + inlineDelete +
     '<a class="links" id=' + rowObject["modifieduserGuid"] + '  onclick="Permobil.CustomNotes.openUserPage(this)" >' + rowObject["modifiedby"] + '</a> '
-   + ' - <span class="timer">' + rowObject["modifiedon"] + ' </span>';
+    + ' - <span class="timer">' + rowObject["modifiedon"] + ' </span>';
     return new_formated_cellvalue;
 }
-Permobil.CustomNotes.DeleteFile = function (annotation)
-{
+Permobil.CustomNotes.DeleteFile = function (annotation) {
     Permobil.BusyIndicator.Show();
     Permobil.OData.deleteRecord(annotation.id, Permobil.Settings.ANNOTATION_ENTITY, function () {
         Permobil.CustomNotes.GetNotes();
@@ -73,7 +72,7 @@ Permobil.CustomNotes.DownloadAttachment = function (file) {
 Permobil.CustomNotes.GetNotesSuccess = function success() {
     try {
         var data = {
-            colNames: ['Title', '', '', '', '', '', '', '', '', '' ],
+            colNames: ['Title', '', '', '', '', '', '', '', '', ''],
             data: Permobil.CustomNotes.annotationList,
             colModel: [
                 {
@@ -81,39 +80,46 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
                     formatter: Permobil.CustomNotes.formatGridDisplay
                 }, {
                     name: 'actions', index: 'actions', formatter: 'actions',
-                    width:30,
+                    width: 30,
                     formatoptions: {
                         keys: true,
                         editbutton: false,
                         delOptions: {
-                            delicon:'delicon',
-                            msg:'Are you sure want to delete this note?',
-                            beforeSubmit: function (id ) { 
-                                Permobil.CustomNotes.Delete(id );
+                            delicon: 'delicon',
+                            msg: 'Are you sure want to delete this note?',
+                            beforeSubmit: function (id) {
+                                Permobil.CustomNotes.Delete(id);
                                 return "1";
                             }
                         }
                     }
                 },
-                {
-                    name: 'filename',
-                    index: 'customer_id',
-                    caption:'File Name',
-                    align: 'left',
-                    editable: true,
-                    hidden:true,
-                    edittype: 'file',
-                    editoptions: {
-                        enctype: "multipart/form-data"
-                    },
-                    width: 210,
-                    align: 'center',
-                    //formatter: jgImageFormatter,
-                    search: false
-                },
-                { name: 'notes_name',   hidden: true, editable: true },
+
+                { name: 'notes_name', hidden: true, editable: true },
                 { name: 'notes_desc', hidden: true, editable: true },
-                 
+                 {
+                     name: 'filename',
+                     index: 'customer_id',
+                     caption: 'File Name',
+                     align: 'left',
+                     editable: true,
+                     hidden: true,
+                     edittype: 'file',
+                     editoptions: {
+                         enctype: "multipart/form-data",
+                         dataEvents: [
+                                    {
+                                        type: 'change', data: { i: 7 },
+                                        fn: function (e) {
+                                            Permobil.CustomNotes.handleFileSelect(e, true);
+                                        }
+                                    }]
+                     },
+                     width: 210,
+                     align: 'center',
+                     //formatter: jgImageFormatter,
+                     search: false
+                 },
                 { name: 'notes_id', hidden: true },
                 { name: 'modifiedby', hidden: true },
                 { name: 'modifiedon', hidden: true },
@@ -141,7 +147,7 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
         console.log(ex);
     }
 }
-Permobil.CustomNotes.UploadImage=function(response, postdata) {
+Permobil.CustomNotes.UploadImage = function (response, postdata) {
 
     var data = $.parseJSON(response.responseText);
 
@@ -155,7 +161,7 @@ Permobil.CustomNotes.UploadImage=function(response, postdata) {
 
 }
 
-Permobil.CustomNotes.ajaxFileUpload=function (id) {
+Permobil.CustomNotes.ajaxFileUpload = function (id) {
     $("#loading")
     .ajaxStart(function () {
         $(this).show();
@@ -197,6 +203,7 @@ Permobil.CustomNotes.OpenEditForm = function () {
         jQuery("#notesGrid").jqGrid('editGridRow', gr, {
             height: 150, reloadAfterSubmit: false,
             editCaption: "Edit Notes",
+            recreateForm: true,
             processData: "Saving...",
             closeAfterEdit: true,
             beforeShowForm: function (form) {
@@ -205,7 +212,10 @@ Permobil.CustomNotes.OpenEditForm = function () {
                 $("tr#tr_filename").show();
                 $("tr#tr_formatted").hide();
                 $(".navButton").hide();
-                $("#TblGrid_notesGrid").append('<tr  class="FormData" id="tr_spnfilename"><td class="CaptionTD"></td><td class="DataTD"><span>' + $("#notes_desc").val() + '</span></td></tr>')
+                $("#sData").removeClass();
+                $("#sData").addClass("submit-btn");
+                $("#cData").removeClass();
+                $("#cData").addClass("submit-btn"); 
 
             },
             afterclickPgButtons: function (whichbutton, form, rowid) {
@@ -214,9 +224,12 @@ Permobil.CustomNotes.OpenEditForm = function () {
                 $("tr#tr_filename").show();
                 $("tr#tr_formatted").hide();
                 $(".navButton").hide();
-                //$("tr#tr_modifieduserGuid").show();
+                $("#sData").removeClass();
+                $("#sData").addClass("submit-btn");
+                $("#cData").removeClass();
+                $("#cData").addClass("submit-btn");
             },
-            beforeSubmit: function (id,rowid,options) {
+            beforeSubmit: function (id, rowid, options) {
                 //var gr = jQuery("#notesGrid").jqGrid('getGridParam', id);
                 Permobil.CustomNotes.UpdateNotes(id);
                 return "1";
@@ -230,10 +243,10 @@ Permobil.CustomNotes.GetNotesFailure = function failure() {
     alert("error");
 }
 Permobil.CustomNotes.GridCompleted = function (grid) {
-      $('.ui-jqgrid-hdiv').hide();
+    $('.ui-jqgrid-hdiv').hide();
     //jQuery("#notesGrid").jqGrid('navGrid', 'hideCol', "notes_desc");
 }
-Permobil.CustomNotes.Delete = function (id ) {
+Permobil.CustomNotes.Delete = function (id) {
     try {
         Permobil.BusyIndicator.Show();
         var Rowdata = jQuery("#notesGrid").getRowData(id);
@@ -247,7 +260,7 @@ Permobil.CustomNotes.Delete = function (id ) {
                     console.log(err);
                 });
             }
-            else { Permobil.CustomNotes.GetNotes();  console.log("ther is no file to delete"); }
+            else { Permobil.CustomNotes.GetNotes(); console.log("ther is no file to delete"); }
         }, function (err) {
             Permobil.BusyIndicator.Hide();
             console.log(err);
@@ -265,9 +278,8 @@ Permobil.CustomNotes.openUserPage = function (userid) {
         console.log(ex);
     }
 }
-Permobil.CustomNotes.handleFileSelect = function (evt) {
-    var file = evt.files[0];
-
+Permobil.CustomNotes.handleFileSelect = function (evt, isEdit) {
+    var file = (isEdit) ? evt.target.files[0] : evt.files[0];
     if (file) {
         var reader = new FileReader();
 
@@ -321,7 +333,7 @@ Permobil.CustomNotes.SaveFile = function (data) {
 
     }, function () { });
 }
-Permobil.CustomNotes.UpdateNotes = function (data ) {
+Permobil.CustomNotes.UpdateNotes = function (data) {
     var Rowdata = jQuery("#notesGrid").getRowData(data.notesGrid_id);
     var notesObj = new Object();
     notesObj.permobil_name = data.notes_name;
@@ -329,31 +341,41 @@ Permobil.CustomNotes.UpdateNotes = function (data ) {
     Permobil.CustomNotes.CurrentNotesID = Rowdata.notes_id;
     Permobil.CustomNotes.CurrentAnnotationID = Rowdata.annotationid;
     Permobil.OData.updateRecord(Rowdata.notes_id, notesObj, Permobil.Settings.NOTES_ENTITY, function (data) {
-        Permobil.CustomNotes.UpdateFile();
+        Permobil.CustomNotes.UpdateFile($("#filename").val().trim().replace(/C:\\fakepath\\/i, ''));
     }, function (err) {
         alert("error is in notes save:" + err);
 
     }, function () { });
 }
 
-Permobil.CustomNotes.UpdateFile = function () {
-    var annotationObj = new Object();
-    annotationObj.DocumentBody = Permobil.CustomNotes.EncodedFileBody;
-    annotationObj.FileName = $('#txtFileName').val().trim().replace(/C:\\fakepath\\/i, '');
-    annotationObj.ObjectId = { Id: Permobil.CustomNotes.CurrentNotesID, LogicalName: "permobil_notes", Name: null };
-    if (Permobil.CustomNotes.CurrentAnnotationID.length > 34) {
-        Permobil.OData.updateRecord(Permobil.CustomNotes.CurrentAnnotationID, annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
-            Permobil.CustomNotes.GetNotes();
-        }, function (err) {
-            alert("error is in notes save:" + err);
+Permobil.CustomNotes.UpdateFile = function (filename) {
+    if (filename.length > 0) {
+        var annotationObj = new Object();
+        annotationObj.DocumentBody = Permobil.CustomNotes.EncodedFileBody;
+        annotationObj.FileName = filename;
+        annotationObj.ObjectId = { Id: Permobil.CustomNotes.CurrentNotesID, LogicalName: "permobil_notes", Name: null };
+        if (Permobil.CustomNotes.CurrentAnnotationID.length == 36) {//if file already there            
+            Permobil.OData.updateRecord(Permobil.CustomNotes.CurrentAnnotationID, annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+                Permobil.CustomNotes.GetNotes();
+            }, function (err) {
+                alert("error is in notes save:" + err);
 
-        }, function () { });
+            }, function () { });
+        } else {
+            
+            Permobil.OData.createRecord(annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+                Permobil.CustomNotes.GetNotes();
+            }, function (err) {
+                alert("error is in notes save:" + err);
+
+            }, function () { });
+        }
     }
     else { Permobil.CustomNotes.GetNotes(); }
 }
 Permobil.CustomNotes.GetNotes = function () {
     try {
-        $("#notesGrid").empty(); 
+        $("#notesGrid").empty();
         var getNotes = "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true' >" +
             "<entity name='permobil_notes' >" +
             "<attribute name='permobil_name' /><attribute name='permobil_description' /><attribute name='permobil_notesid' /> <attribute name='modifiedby' /> <attribute name='modifiedon'/> " +
@@ -409,7 +431,7 @@ Permobil.CustomNotes.ParseFetchResponse = function (FetchResult) {
                         item.modifieduserGuid = $(this).find("b\\:value a\\:Value ,value").text().substring(0, 36);
                         break;
                     case "modifiedon":
-                        item.modifiedon =  Permobil.Common.formatDate($(this).find("b\\:value a\\:Value ,value").text());
+                        item.modifiedon = new Date(Date.parse(($(this).find("b\\:value a\\:Value ,value").text()), 'MM-dd-yyyy HH:mm')).toLocaleString();
                         break;
                     case "permobil_accountid":
                         item.permobil_accountid = $(this).find("b\\:value a\\:Value ,value").text();

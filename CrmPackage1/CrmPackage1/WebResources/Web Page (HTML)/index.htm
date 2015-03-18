@@ -35,17 +35,17 @@
 
        
         <div class="file-upload">
-            <h1 id="lblTitle">Title </h1>
-            <input type="text" onkeydown="Permobil.CustomNotes.hoverTitle()" id="txtNotesName" class="transparent"  />
+          <!--  <h1 id="lblTitle">Title </h1>-->
+            <input type="text" placeholder="Title" onkeydown="Permobil.CustomNotes.hoverTitle()" id="txtNotesName" class="transparent"  />
            
         </div>
          <div class="file-upload">
-            <h1 id="lblDesc">Description </h1>
-            <input type="text" id="txtDesc" class="transparent" />
+            <!--<h1 id="lblDesc">Description </h1>-->
+            <input type="text" id="txtDesc" name="descr" placeholder="Enter a note"   class="transparent" />
 
         </div>
          <div class="file-attachment"> 
-                <input class="fileuploadelement" type="file" id="txtFileName" onchange="Permobil.CustomNotes.handleFileSelect(this)" /> 
+                <input class="fileuploadelement" type="file" id="txtFileName" onchange="Permobil.CustomNotes.handleFileSelect(this,false)" /> 
                 <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button>
             </div>
         <div style="margin-top: 10px" id="GridContainer">
