@@ -49,8 +49,8 @@ Permobil.CustomNotes.hoverTitle = function () {
     } else if (event.keyCode == 9) { alert('cancel'); }
 }
 Permobil.CustomNotes.formatGridDisplay = function (cellvalue, options, rowObject) { // format the cellvalue to new format
-    var inlineDelete = (rowObject["annotationid"] && rowObject["annotationid"].length == 36) ? ('<img id=' + rowObject["annotationid"] + '  onclick="Permobil.CustomNotes.DeleteFile(this)" src="../img/delete.png">  <br/> ') : ' ';
-    var filelink = (rowObject["annotationid"] && rowObject["annotationid"].length == 36) ? ('<a class="links" id=' + rowObject["annotationid"] + '   onclick="Permobil.CustomNotes.DownloadAttachment(this)"   target="_blank" >' + rowObject["filename"] + '</a>') : "";
+    var inlineDelete = (rowObject["annotationid"] && rowObject["annotationid"].length == 36) ? ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img id=' + rowObject["annotationid"] + '  onclick="Permobil.CustomNotes.DeleteFile(this)" src="../img/delete.png"> </div>') : ' ';
+    var filelink = (rowObject["annotationid"] && rowObject["annotationid"].length == 36) ? ('<div class="attachments"><img width="16" height="16" src="../img/attach.png" />&nbsp;&nbsp;<a class="filelink" id=' + rowObject["annotationid"] + '   onclick="Permobil.CustomNotes.DownloadAttachment(this)"   target="_blank" >' + rowObject["filename"] + '</a>') : "";
     var new_formated_cellvalue = '<h2>' + rowObject["notes_name"] + '</h2> <p>' + rowObject["notes_desc"] + '</p>' +
     filelink + inlineDelete +
     '<a class="links" id=' + rowObject["modifieduserGuid"] + '  onclick="Permobil.CustomNotes.openUserPage(this)" >' + rowObject["modifiedby"] + '</a> '
@@ -85,6 +85,12 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
                         keys: true,
                         editbutton: false,
                         delOptions: {
+                            afterShowForm : function (form) {
+                                $("#dData").removeClass();
+                                $("#dData").addClass("submit-btn");
+                                $("#eData").removeClass();
+                                $("#eData").addClass("submit-btn");
+                            },
                             delicon: 'delicon',
                             msg: 'Are you sure want to delete this note?',
                             beforeSubmit: function (id) {
@@ -129,7 +135,7 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
         var notesobj = {
             gridID: 'notesGrid',
             ht: auto,
-            wd: 600,
+            wd: 400,
             dataSource: data,
             PageSize: 10,
             sortBy: 'permobil_name',
@@ -146,57 +152,7 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
     } catch (ex) {
         console.log(ex);
     }
-}
-Permobil.CustomNotes.UploadImage = function (response, postdata) {
-
-    var data = $.parseJSON(response.responseText);
-
-    if (data.success == true) {
-        if ($("#fileToUpload").val() != "") {
-            ajaxFileUpload(data.id);
-        }
-    }
-
-    return [data.success, data.message, data.id];
-
-}
-
-Permobil.CustomNotes.ajaxFileUpload = function (id) {
-    $("#loading")
-    .ajaxStart(function () {
-        $(this).show();
-    })
-    .ajaxComplete(function () {
-        $(this).hide();
-    });
-
-    $.ajaxFileUpload
-    (
-        {
-            url: '@Url.Action("UploadImage")',
-            secureuri: false,
-            fileElementId: 'fileToUpload',
-            dataType: 'json',
-            data: { id: id },
-            success: function (data, status) {
-
-                if (typeof (data.success) != 'undefined') {
-                    if (data.success == true) {
-                        return;
-                    } else {
-                        alert(data.message);
-                    }
-                }
-                else {
-                    return alert('Failed to upload logo!');
-                }
-            },
-            error: function (data, status, e) {
-                return alert('Failed to upload logo!');
-            }
-        }
-    )
-}
+} 
 Permobil.CustomNotes.OpenEditForm = function () {
     var gr = jQuery("#notesGrid").jqGrid('getGridParam', 'selrow');
     if (gr != null)
@@ -401,40 +357,40 @@ Permobil.CustomNotes.ParseFetchResponse = function (FetchResult) {
     /// <param name="productItemCollection" type="object">object that products for which the related products is fetched.</param>
     try {
         Permobil.CustomNotes.annotationList.length = 0;
-        $.each($(FetchResult).find("a\\:Entities ,Attributes"), function (j, it) {
+        $.each($(FetchResult).find("a\\:Entities a\\:Entity ,Attributes"), function (j, it) {
             var item = new Permobil.CustomNotes.Notes();
-            $.each($(this).find("a\\:Attributes ,KeyValuePairOfstringanyType"), function (i, it2) {
-                switch ($(this).find("b\\:value a\\:Value ,key").text()) {
+            $.each($(this).find("a\\:KeyValuePairOfstringanyType,KeyValuePairOfstringanyType"), function (i, it2) {
+                switch ($(this).find("b\\:key ,key").text()) {
                     case "ab.filename":
-                        item.filename = $(this).find("b\\:value ,Value").text();
+                        item.filename = $(this).find("b\\:value a\\:Value, Value").text();
                         break;
                     case "ab.annotationid":
-                        item.annotationid = $(this).find("b\\:value ,Value").text();
+                        item.annotationid = $(this).find("b\\:value a\\:Value, Value").text();
                         break;
                     case "ab.notetext":
-                        item.notetext = $(this).find("b\\:value ,Value").text();
+                        item.notetext = $(this).find("b\\:value a\\:Value, Value").text();
                         break;
                     case "ab.subject":
-                        item.subject = $(this).find("b\\:value ,Value").text();
+                        item.subject = $(this).find("b\\:value a\\:Value, Value").text();
                         break;
                     case "permobil_name":
-                        item.notes_name = $(this).find("b\\:value a\\:Value ,value").text();
+                        item.notes_name = $(this).find("b\\:value,value").text();
                         break;
                     case "permobil_description":
-                        item.notes_desc = $(this).find("b\\:value a\\:Value ,value").text();
+                        item.notes_desc = $(this).find("b\\:value,value").text();
                         break;
                     case "permobil_notesid":
-                        item.notes_id = $(this).find("b\\:value a\\:Value ,value").text();
+                        item.notes_id = $(this).find("b\\:value,value").text();
                         break;
                     case "modifiedby":
-                        item.modifiedby = $(this).find("b\\:value a\\:Value ,value").text().substring(46, $(this).find("b\\:value a\\:Value ,value").text().length);
-                        item.modifieduserGuid = $(this).find("b\\:value a\\:Value ,value").text().substring(0, 36);
+                        item.modifiedby = $(this).find("b\\:value,value").text().substring(46, $(this).find("b\\:value,value").text().length);
+                        item.modifieduserGuid = $(this).find("b\\:value,value").text().substring(0, 36);
                         break;
                     case "modifiedon":
-                        item.modifiedon = new Date(Date.parse(($(this).find("b\\:value a\\:Value ,value").text()), 'MM-dd-yyyy HH:mm')).toLocaleString();
+                        item.modifiedon = new Date(Date.parse(($(this).find("b\\:value,value").text()), 'MM-dd-yyyy HH:mm')).toLocaleString();
                         break;
                     case "permobil_accountid":
-                        item.permobil_accountid = $(this).find("b\\:value a\\:Value ,value").text();
+                        item.permobil_accountid = $(this).find("b\\:value,value").text();
                         break;
                 }
 

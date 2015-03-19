@@ -7,13 +7,12 @@
     <!--<script src="../libs/jquery_1.4.4.min.js"></script>-->
     <link href="../css/jquery_ui_1.7.3.custom.css" rel="stylesheet" type="text/css" />
      <link href="../css/jquery_ui.css" rel="stylesheet" type="text/css" />
-    <link href="../css/redmondTheme.css" rel="stylesheet" type="text/css" />
+    <!--<link href="../css/redmondTheme.css" rel="stylesheet" type="text/css" />-->
     <link href="../css/NoteManager.css" rel="stylesheet" type="text/css" />
     <script src="../../permobil_jquery172"></script>
     <!--<script src="../../permobil_json2"></script>-->
     <script src="../libs/jquery.confirm.js"></script>
-    <script src="../libs/jquery_ui.js"></script>
-    <script src="../libs/ajaxfileupload.js"></script>
+    <script src="../libs/jquery_ui.js"></script> 
     <script src="../js/Common.js"></script>
     <script src="../../permobil_ODATA"></script>
     <script src="../js/MOdata.js"></script>
@@ -21,8 +20,7 @@
     <script src="../libs/JqGrid.js"></script>
     <script src="../js/SOAP.js"></script>
     <script src="../js/Permobil_settings.js"></script>
-    <script src="../js/MetaDataService.js"></script>
-    <script src="../js/CRMMetaDataService.js"></script>
+    <script src="../js/MetaDataService.js"></script> 
     <script src="../js/CustomGrid.js"></script>
     <script src="../js/CustomNotes.js"></script>
 
@@ -36,7 +34,8 @@
        
         <div class="file-upload">
           <!--  <h1 id="lblTitle">Title </h1>-->
-            <input type="text" placeholder="Title" onkeydown="Permobil.CustomNotes.hoverTitle()" id="txtNotesName" class="transparent"  />
+            <!--onkeydown="Permobil.CustomNotes.hoverTitle()" -->
+            <input type="text" placeholder="Title" id="txtNotesName" class="transparent"  />
            
         </div>
          <div class="file-upload">
@@ -53,7 +52,7 @@
             </table>
         </div>
     </div>
-
+    <div class="upload-container"></div>
      <script >
          //$("#txtDesc").focus(function () {
          //    $("#lblDesc").hide(); $("#lblTitle").show();

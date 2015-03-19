@@ -68,6 +68,11 @@
       <UniqueName>permobil_/Css/redmondTheme.css</UniqueName>
       <WebResourceType>CascadingStylesheet</WebResourceType>
     </CRMWebResource>
+    <CRMWebResource Include="WebResources\CSS\StyleSheet1.css">
+      <DisplayName>StyleSheet1.css</DisplayName>
+      <UniqueName>permobil_/css/StyleSheet1.css</UniqueName>
+      <WebResourceType>CascadingStylesheet</WebResourceType>
+    </CRMWebResource>
     <CRMWebResource Include="WebResources\images\attach.png">
       <DisplayName>attach.png</DisplayName>
       <UniqueName>permobil_/img/attach.png</UniqueName>
@@ -153,19 +158,9 @@
       <UniqueName>permobil_/img/ui_icons_f9bd01_256x240.png</UniqueName>
       <WebResourceType>PNG</WebResourceType>
     </CRMWebResource>
-    <CRMWebResource Include="WebResources\Script\ajaxfileupload.js">
-      <DisplayName>ajaxfileupload.js</DisplayName>
-      <UniqueName>permobil_/libs/ajaxfileupload.js</UniqueName>
-      <WebResourceType>Script</WebResourceType>
-    </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\Common.js">
       <DisplayName>Common.js</DisplayName>
       <UniqueName>permobil_/js/Common.js</UniqueName>
-      <WebResourceType>Script</WebResourceType>
-    </CRMWebResource>
-    <CRMWebResource Include="WebResources\Script\CRMMetaDataService.js">
-      <DisplayName>CRMMetaDataService.js</DisplayName>
-      <UniqueName>permobil_/js/CRMMetaDataService.js</UniqueName>
       <WebResourceType>Script</WebResourceType>
     </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\CustomGrid.js">
@@ -227,6 +222,11 @@
       <DisplayName>SOAP.js</DisplayName>
       <UniqueName>permobil_/js/SOAP.js</UniqueName>
       <WebResourceType>Script</WebResourceType>
+    </CRMWebResource>
+    <CRMWebResource Include="WebResources\Web Page %28HTML%29\index2.htm">
+      <DisplayName>index2.htm</DisplayName>
+      <UniqueName>permobil_/htm/index2.htm</UniqueName>
+      <WebResourceType>WebPage</WebResourceType>
     </CRMWebResource>
     <CRMWebResource Include="WebResources\Web Page (HTML)\index.htm">
       <DisplayName>index.htm</DisplayName>
