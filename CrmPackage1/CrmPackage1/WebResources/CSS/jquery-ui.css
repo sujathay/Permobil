@@ -830,8 +830,8 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 1em;
+	/*font-family: Arial,Helvetica,sans-serif;*/
+	font-size: 11px;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -847,6 +847,7 @@ body .ui-tooltip {
 	border: 1px solid #dddddd;
 	background: #ffffff;
 	color: #333333;
+    
 }
 .ui-widget-content a {
 	color: #333333;
@@ -884,7 +885,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
 	border: 1px solid #cccccc;
-	background: #ededed;
+	/*background: #ededed;*/
 	font-weight: normal;
 	color: #2b2b2b;
 }
@@ -978,7 +979,8 @@ body .ui-tooltip {
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-	background-image: url("images/ui-icons_444444_256x240.png");
+	/*background-image: url("images/ui-icons_444444_256x240.png");*/
+     background-image: url(../img/delete.png);
 }
 .ui-widget-header .ui-icon {
 	background-image: url("images/ui-icons_444444_256x240.png");
@@ -988,13 +990,15 @@ body .ui-tooltip {
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon {
-	background-image: url("images/ui-icons_555555_256x240.png");
+	/*background-image: url("images/ui-icons_555555_256x240.png");*/
+    background-image: url(../img/delete.png);
 }
 .ui-state-active .ui-icon {
 	background-image: url("images/ui-icons_ffffff_256x240.png");
 }
 .ui-state-highlight .ui-icon {
-	background-image: url("images/ui-icons_777620_256x240.png");
+	/*background-image: url("images/ui-icons_777620_256x240.png");*/
+     background-image: url(../img/delete.png);
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
@@ -1187,7 +1191,7 @@ body .ui-tooltip {
 ----------------------------------*/
 
 /* Corner radius */
-.ui-corner-all,
+/*.ui-corner-all,
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
@@ -1210,7 +1214,7 @@ body .ui-tooltip {
 .ui-corner-right,
 .ui-corner-br {
 	border-bottom-right-radius: 3px;
-}
+}*/
 
 /* Overlays */
 .ui-widget-overlay {

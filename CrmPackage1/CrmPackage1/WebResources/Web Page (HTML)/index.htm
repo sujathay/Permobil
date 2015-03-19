@@ -6,13 +6,14 @@
     <script src="../../ClientGlobalContext.js.aspx" type="text/javascript"></script>
     <!--<script src="../libs/jquery_1.4.4.min.js"></script>-->
     <link href="../css/jquery_ui_1.7.3.custom.css" rel="stylesheet" type="text/css" />
-     <link href="../css/jquery_ui.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jquery_ui.css" rel="stylesheet" type="text/css" />
     <!--<link href="../css/redmondTheme.css" rel="stylesheet" type="text/css" />-->
     <link href="../css/NoteManager.css" rel="stylesheet" type="text/css" />
     <script src="../../permobil_jquery172"></script>
     <!--<script src="../../permobil_json2"></script>-->
     <script src="../libs/jquery.confirm.js"></script>
-    <script src="../libs/jquery_ui.js"></script> 
+    <script src="../libs/jquery_ui.js"></script>
+    <script src="../libs/WaterMark.js"></script>
     <script src="../js/Common.js"></script>
     <script src="../../permobil_ODATA"></script>
     <script src="../js/MOdata.js"></script>
@@ -20,56 +21,34 @@
     <script src="../libs/JqGrid.js"></script>
     <script src="../js/SOAP.js"></script>
     <script src="../js/Permobil_settings.js"></script>
-    <script src="../js/MetaDataService.js"></script> 
+    <script src="../js/MetaDataService.js"></script>
     <script src="../js/CustomGrid.js"></script>
     <script src="../js/CustomNotes.js"></script>
-
+    <script src="../js/Fileuploader.js"></script>
 </head>
 
 <body>
     <!-- onfocus="if(this.value == 'Description') { this.value = ''; }"-->
     <div class="upload-container">
         <div class=" yj-balloon-arrow-border"></div>
-
-       
         <div class="file-upload">
-          <!--  <h1 id="lblTitle">Title </h1>-->
             <!--onkeydown="Permobil.CustomNotes.hoverTitle()" -->
-            <input type="text" placeholder="Title" id="txtNotesName" class="transparent"  />
-           
-        </div>
-         <div class="file-upload">
-            <!--<h1 id="lblDesc">Description </h1>-->
-            <input type="text" id="txtDesc" name="descr" placeholder="Enter a note"   class="transparent" />
+            <input type="text" data-watermark="Title" title="Title" id="txtNotesName" class="watermark" />
 
         </div>
-         <div class="file-attachment"> 
-                <input class="fileuploadelement" type="file" id="txtFileName" onchange="Permobil.CustomNotes.handleFileSelect(this,false)" /> 
-                <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button>
-            </div>
+        <div class="file-upload">
+            <input type="text" data-watermark="Enter a note" id="txtDesc" title="Enter a note" class="watermark" />
+
+        </div>
+        <div class="file-attachment" id="uploader">
+            <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button>
+        </div>
         <div style="margin-top: 10px" id="GridContainer">
             <table id="notesGrid">
             </table>
         </div>
     </div>
     <div class="upload-container"></div>
-     <script >
-         //$("#txtDesc").focus(function () {
-         //    $("#lblDesc").hide(); $("#lblTitle").show();
-         //});
-         //$("#txtNotesName").focus(function () {
-         //    $("#lblTitle").hide(); $("#lblDesc").show();
-         //});
 
-         //$("#txtDesc").focusout(function () {
-         //    $("#lblDesc").show(); $("#lblTitle").show();
-         //});
-         //$("#txtNotesName").focusout(function () {
-         //    $("#lblTitle").show(); $("#lblDesc").show();
-         //});
-
-        
-         
-    </script>
 </body>
 </html>

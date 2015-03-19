@@ -11,7 +11,8 @@ Permobil.CustomNotes.annotationList = [];
 Permobil.CustomNotes.EncodedFileBody = "";
 Permobil.CustomNotes.CurrentAnnotationID = "";
 Permobil.CustomNotes.CurrentNotesID = "";
-
+Permobil.CustomNotes.Uploader = "";
+Permobil.CustomNotes.GridUploader = "";
 Permobil.CustomNotes.selectedAccID = "DD8D7040-2FC4-E411-80DF-C4346BADA664";
 Permobil.CustomNotes.Init = function () {
     /// <signature>
@@ -67,12 +68,18 @@ Permobil.CustomNotes.DeleteFile = function (annotation) {
     });
 }
 Permobil.CustomNotes.DownloadAttachment = function (file) {
-    Xrm.Utility.openEntityForm("annotation", file.id);
+    // Xrm.Utility.openEntityForm("annotation", file.id);
+    try {
+        var noteId = $(this).attr("id");
+        window.open(Permobil.Common.getClientUrl() + "/WebResources/Permobil_/htm/PM_OpenDocs.htm?data=noteId%3d" + file.id);
+    } catch (ex) {
+        alert(ex);
+    }
 }
 Permobil.CustomNotes.GetNotesSuccess = function success() {
     try {
         var data = {
-            colNames: ['Title', '', '', '', '', '', '', '', '', ''],
+            colNames: ['Title', '', '', '', '', '', '', '', '' ],
             data: Permobil.CustomNotes.annotationList,
             colModel: [
                 {
@@ -85,7 +92,7 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
                         keys: true,
                         editbutton: false,
                         delOptions: {
-                            afterShowForm : function (form) {
+                            afterShowForm: function (form) {
                                 $("#dData").removeClass();
                                 $("#dData").addClass("submit-btn");
                                 $("#eData").removeClass();
@@ -100,32 +107,8 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
                         }
                     }
                 },
-
                 { name: 'notes_name', hidden: true, editable: true },
-                { name: 'notes_desc', hidden: true, editable: true },
-                 {
-                     name: 'filename',
-                     index: 'customer_id',
-                     caption: 'File Name',
-                     align: 'left',
-                     editable: true,
-                     hidden: true,
-                     edittype: 'file',
-                     editoptions: {
-                         enctype: "multipart/form-data",
-                         dataEvents: [
-                                    {
-                                        type: 'change', data: { i: 7 },
-                                        fn: function (e) {
-                                            Permobil.CustomNotes.handleFileSelect(e, true);
-                                        }
-                                    }]
-                     },
-                     width: 210,
-                     align: 'center',
-                     //formatter: jgImageFormatter,
-                     search: false
-                 },
+                { name: 'notes_desc', hidden: true, editable: true }, 
                 { name: 'notes_id', hidden: true },
                 { name: 'modifiedby', hidden: true },
                 { name: 'modifiedon', hidden: true },
@@ -152,7 +135,10 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
     } catch (ex) {
         console.log(ex);
     }
-} 
+}
+Permobil.CustomNotes.CreateFileInput = function () {
+    Permobil.CustomNotes.GridUploader = new FileAppender("uploader", {}, function (Data) { console.log(Data) });
+}
 Permobil.CustomNotes.OpenEditForm = function () {
     var gr = jQuery("#notesGrid").jqGrid('getGridParam', 'selrow');
     if (gr != null)
@@ -162,17 +148,20 @@ Permobil.CustomNotes.OpenEditForm = function () {
             recreateForm: true,
             processData: "Saving...",
             closeAfterEdit: true,
-            beforeShowForm: function (form) {
+            beforeShowForm: function (form) {                
+                var gridUploaderID = 'tdGridUploader' + $("#id_g").val();  
+                $('<tr style="" rowpos="3" class="FormData" id="tr_filename"><td class="CaptionTD"></td><td id="' + gridUploaderID + '" class="DataTD"> </td></tr>')
+                    .insertAfter($("#tr_notes_desc"));
+                Permobil.CustomNotes.GridUploader = new FileAppender(gridUploaderID, {}, function (Data) { console.log(Data) });
                 $("tr#tr_notes_desc").show();
-                $("tr#tr_notes_name").show();
-                $("tr#tr_filename").show();
+                $("tr#tr_notes_name").show(); 
                 $("tr#tr_formatted").hide();
                 $(".navButton").hide();
                 $("#sData").removeClass();
                 $("#sData").addClass("submit-btn");
                 $("#cData").removeClass();
-                $("#cData").addClass("submit-btn"); 
-
+                $("#cData").addClass("submit-btn");                
+                //gridUploaderID.prependTo("#" + gridUploaderID);
             },
             afterclickPgButtons: function (whichbutton, form, rowid) {
                 $("tr#tr_notes_desc").show();
@@ -233,31 +222,18 @@ Permobil.CustomNotes.openUserPage = function (userid) {
     } catch (ex) {
         console.log(ex);
     }
-}
-Permobil.CustomNotes.handleFileSelect = function (evt, isEdit) {
-    var file = (isEdit) ? evt.target.files[0] : evt.files[0];
-    if (file) {
-        var reader = new FileReader();
-
-        reader.onload = function (readerEvt) {
-            var binaryString = readerEvt.target.result;
-            Permobil.CustomNotes.EncodedFileBody = btoa(binaryString);
-        };
-
-        reader.readAsBinaryString(file);
-    }
-}
+} 
 Permobil.CustomNotes.Save = function () {
     /// <signature>
     ///<summary></summary> 
     /// </signature>
     try {
-
+        $('.watermark').watermark('clearWatermarks');
         var notesObj = new Object();
         notesObj.permobil_name = $('#txtNotesName').val().trim();
         notesObj.permobil_description = $('#txtDesc').val().trim();
         notesObj.permobil_AccountId = { Id: Permobil.CustomNotes.selectedAccID, LogicalName: "account" };
-        if ($('#txtNotesName').val().trim().length > 0 || $('#txtDesc').val().trim().length > 0 || $('#txtFileName').val().trim().length > 0)
+        if ($('#txtNotesName').val().trim().length > 0 || $('#txtDesc').val().trim().length > 0 || $('#btnEvidenceUploader').val().trim().length > 0)
         { Permobil.BusyIndicator.Show(); Permobil.CustomNotes.SaveData(notesObj); }
         else {
 
@@ -269,7 +245,7 @@ Permobil.CustomNotes.Save = function () {
 }
 Permobil.CustomNotes.SaveData = function (notesObj) {
     Permobil.OData.createRecord(notesObj, Permobil.Settings.NOTES_ENTITY, function (data) {
-        if ($('#txtFileName').val().trim().length > 0) {
+        if ($('#btnEvidenceUploader').val().trim().length > 0) {
             Permobil.CustomNotes.SaveFile(data);
         } else { Permobil.CustomNotes.GetNotes(); }
     }, function (err) {
@@ -278,16 +254,36 @@ Permobil.CustomNotes.SaveData = function (notesObj) {
     }, function () { });
 }
 Permobil.CustomNotes.SaveFile = function (data) {
-    var annotationObj = new Object();
-    annotationObj.DocumentBody = Permobil.CustomNotes.EncodedFileBody;
-    annotationObj.FileName = $('#txtFileName').val().trim().replace(/C:\\fakepath\\/i, '');
-    annotationObj.ObjectId = { Id: data.permobil_notesId, LogicalName: "permobil_notes", Name: null };
-    Permobil.OData.createRecord(annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
-        Permobil.CustomNotes.GetNotes();
-    }, function (err) {
-        alert("error is in notes save:" + err);
 
-    }, function () { });
+    Permobil.CustomNotes.Uploader.GetFile(successFile);
+    function successFile(file) {
+        if (file) {
+            var annotationObj = new Object();
+            annotationObj.DocumentBody = file.fileData;
+            annotationObj.FileName = file.fileName;
+            annotationObj.NoteText = "Notes Attachment " + file.fileName;
+            annotationObj.Subject = "Notes Attachment " + file.fileName;
+            annotationObj.FileName = file.fileName;
+            annotationObj.MimeType = file.mimeType;
+            annotationObj.ObjectId = { Id: data.permobil_notesId, LogicalName: "permobil_notes", Name: null };
+            Permobil.OData.createRecord(annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+                Permobil.CustomNotes.GetNotes();
+            }, function (err) {
+                alert("error is in notes save:" + err);
+
+            }, function () { });
+        }
+    }
+    //var annotationObj = new Object();
+    //annotationObj.DocumentBody = Permobil.CustomNotes.EncodedFileBody;
+    //annotationObj.FileName = $('#btnEvidenceUploader').val().trim().replace(/C:\\fakepath\\/i, '');
+    //annotationObj.ObjectId = { Id: data.permobil_notesId, LogicalName: "permobil_notes", Name: null };
+    //Permobil.OData.createRecord(annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+    //    Permobil.CustomNotes.GetNotes();
+    //}, function (err) {
+    //    alert("error is in notes save:" + err);
+
+    //}, function () { });
 }
 Permobil.CustomNotes.UpdateNotes = function (data) {
     var Rowdata = jQuery("#notesGrid").getRowData(data.notesGrid_id);
@@ -297,37 +293,67 @@ Permobil.CustomNotes.UpdateNotes = function (data) {
     Permobil.CustomNotes.CurrentNotesID = Rowdata.notes_id;
     Permobil.CustomNotes.CurrentAnnotationID = Rowdata.annotationid;
     Permobil.OData.updateRecord(Rowdata.notes_id, notesObj, Permobil.Settings.NOTES_ENTITY, function (data) {
-        Permobil.CustomNotes.UpdateFile($("#filename").val().trim().replace(/C:\\fakepath\\/i, ''));
+        Permobil.CustomNotes.UpdateFile();
     }, function (err) {
         alert("error is in notes save:" + err);
 
     }, function () { });
 }
 
-Permobil.CustomNotes.UpdateFile = function (filename) {
-    if (filename.length > 0) {
-        var annotationObj = new Object();
-        annotationObj.DocumentBody = Permobil.CustomNotes.EncodedFileBody;
-        annotationObj.FileName = filename;
-        annotationObj.ObjectId = { Id: Permobil.CustomNotes.CurrentNotesID, LogicalName: "permobil_notes", Name: null };
-        if (Permobil.CustomNotes.CurrentAnnotationID.length == 36) {//if file already there            
-            Permobil.OData.updateRecord(Permobil.CustomNotes.CurrentAnnotationID, annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
-                Permobil.CustomNotes.GetNotes();
-            }, function (err) {
-                alert("error is in notes save:" + err);
+Permobil.CustomNotes.UpdateFile = function () {
+    Permobil.CustomNotes.GridUploader.GetFile(successFile);
+    function successFile(file) {
+        if (file) {
+            var annotationObj = new Object();
+            annotationObj.DocumentBody = file.fileData;
+            annotationObj.FileName = file.fileName;
+            annotationObj.NoteText = "Notes Attachment " + file.fileName;
+            annotationObj.Subject = "Notes Attachment " + file.fileName;
+            annotationObj.FileName = file.fileName;
+            annotationObj.MimeType = file.mimeType;
+            annotationObj.ObjectId = { Id: Permobil.CustomNotes.CurrentNotesID, LogicalName: "permobil_notes", Name: null };
+            if (Permobil.CustomNotes.CurrentAnnotationID.length == 36) {//if file already there            
+                Permobil.OData.updateRecord(Permobil.CustomNotes.CurrentAnnotationID, annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+                    Permobil.CustomNotes.GetNotes();
+                }, function (err) {
+                    alert("error is in notes save:" + err);
 
-            }, function () { });
-        } else {
-            
-            Permobil.OData.createRecord(annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
-                Permobil.CustomNotes.GetNotes();
-            }, function (err) {
-                alert("error is in notes save:" + err);
+                }, function () { });
+            } else {
 
-            }, function () { });
+                Permobil.OData.createRecord(annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+                    Permobil.CustomNotes.GetNotes();
+                }, function (err) {
+                    alert("error is in notes save:" + err);
+
+                }, function () { });
+            }
         }
+        else { Permobil.CustomNotes.GetNotes(); }
     }
-    else { Permobil.CustomNotes.GetNotes(); }
+    //if (filename.length > 0) {
+    //    var annotationObj = new Object();
+    //    annotationObj.DocumentBody = Permobil.CustomNotes.EncodedFileBody;
+    //    annotationObj.FileName = filename;
+    //    annotationObj.ObjectId = { Id: Permobil.CustomNotes.CurrentNotesID, LogicalName: "permobil_notes", Name: null };
+    //    if (Permobil.CustomNotes.CurrentAnnotationID.length == 36) {//if file already there            
+    //        Permobil.OData.updateRecord(Permobil.CustomNotes.CurrentAnnotationID, annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+    //            Permobil.CustomNotes.GetNotes();
+    //        }, function (err) {
+    //            alert("error is in notes save:" + err);
+
+    //        }, function () { });
+    //    } else {
+
+    //        Permobil.OData.createRecord(annotationObj, Permobil.Settings.ANNOTATION_ENTITY, function (data) {
+    //            Permobil.CustomNotes.GetNotes();
+    //        }, function (err) {
+    //            alert("error is in notes save:" + err);
+
+    //        }, function () { });
+    //    }
+    //}
+    //else { Permobil.CustomNotes.GetNotes(); }
 }
 Permobil.CustomNotes.GetNotes = function () {
     try {
@@ -412,7 +438,7 @@ Permobil.CustomNotes.ParseFetchResponse = function (FetchResult) {
         });
         $('#txtNotesName').val("");
         $('#txtDesc').val("");
-        $('#txtFileName').val("");
+        $('#btnEvidenceUploader').val("");
         Permobil.CustomNotes.GetNotesSuccess();
     }
     catch (ex) {
@@ -423,5 +449,23 @@ Permobil.CustomNotes.ParseFetchResponse = function (FetchResult) {
 $(document).ready(function () {
     if (!!navigator.userAgent.match(/Trident.*rv\:11\./))
         $('head').append('<meta http-equiv=X-UA-Compatible content="IE=10"/>');
+    Permobil.CustomNotes.Uploader = new FileAppender("uploader", {}, function (Data) { console.log(Data) });
     Permobil.CustomNotes.Init();
+    $(":input[data-watermark]").each(function () {
+        $(this).val($(this).attr("data-watermark"));
+        $(this).css("color", "#a8a8a8");
+        $(this).bind("focus", function () {
+            if ($(this).val() == $(this).attr("data-watermark")) $(this).val('');
+            $(this).css("color", "#000000");
+        });
+        $(this).bind("blur", function () {
+            if ($(this).val() == '') {
+                $(this).val($(this).attr("data-watermark"));
+                $(this).css("color", "#a8a8a8");
+            }
+            else {
+                $(this).css("color", "#000000");
+            }
+        });
+    });
 });

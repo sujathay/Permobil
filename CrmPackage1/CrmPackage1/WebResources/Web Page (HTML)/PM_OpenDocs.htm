@@ -1,0 +1,28 @@
+﻿<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="../../permobil_jquery172"></script>
+    <script src="../js/Common.js"></script>
+    <script type="text/javascript">
+        var Id;
+        $(document).ready(function () {
+            Id = Permobil.Common.GetDataParam()[0][1];
+            var src = Permobil.Common.getClientUrl() + "/notes/edit.aspx?id=" + Id;
+            $("iframe#AnnotationNote").attr('src', src);
+        });
+        function done() {
+            if ($(window.frames[0].document.getElementById("crmAttachment")).length > 0) {
+                var iframe = $(window.frames[0].document.getElementById("crmAttachment"));
+                var token = iframe.attr("wrpctokenurl");
+                var url = Permobil.Common.getClientUrl() + "/Activities/Attachment/download.aspx?AttachmentType=5&AttachmentId={" + Id + "}&IsNotesTabAttachment=null" + token;
+                window.location = url;
+            }
+        }
+    </script>
+</head>
+<body>
+    <iframe id="AnnotationNote" src="" onload="done();" style="display: none;"></iframe>
+</body>
+</html>

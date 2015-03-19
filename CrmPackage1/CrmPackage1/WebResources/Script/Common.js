@@ -4,7 +4,7 @@ if (typeof (Permobil) == "undefined") {
     Permobil = { __namespace: true };
 }
 
-Permobil.Common  = {
+Permobil.Common = {
     __namespace: true,
     context: function () {
         ///<summary>Private function to the context object.</summary>
@@ -21,6 +21,39 @@ Permobil.Common  = {
             else { throw new Error("Context is not available."); }
         }
     },
+    GetDataParam: function () {
+        /// <signature>
+        ///<summary>Get the any query string parameters and load them into the vals array</summary>
+        /// </signature>    
+        var parseDataValue = function (datavalue) {
+            var result = new Array();
+            if (datavalue != "") {
+                result = decodeURIComponent(datavalue).split("&");
+                for (var i in result) {
+                    result[i] = result[i].replace(/\+/g, " ").split("=");
+                }
+            }
+            return result;
+        };
+
+        var vals = new Array();
+
+        if (location.search != "") {
+            vals = location.search.substr(1).split("&");
+            for (var i in vals) {
+                vals[i] = vals[i].replace(/\+/g, " ").split("=");
+            }
+            //look for the parameter named 'data'
+            var found = false;
+            for (var i in vals) {
+                if (vals[i][0].toLowerCase() == "data") {
+                    return parseDataValue(vals[i][1]);
+                }
+            }
+        }
+
+        return null;
+    },
     getClientUrl: function () {
         ///<summary>Private function to return the server URL from the context</summary>
         ///<returns>String</returns>
@@ -32,15 +65,15 @@ Permobil.Common  = {
     handleError: function (e) {
         var defaultMessage = "Unexpected Error occured\n\nMessage:";
         try {
-           
-            alert(  e.message);
+
+            alert(e.message);
         }
         catch (e) {
             alert(e);
         }
         Permobil.BusyIndicator.Hide();
     },
-    formatDate :function (d) {
+    formatDate: function (d) {
         /// <summary>Formats the Date object like 'MM/dd/yyyy'.</summary>  
         var day = d.getDate();
         var mon = d.getMonth();
@@ -108,7 +141,7 @@ Permobil.BusyIndicator = {
     }
 };
 
- 
+
 
 String.format = function () {
     var s = arguments[0];

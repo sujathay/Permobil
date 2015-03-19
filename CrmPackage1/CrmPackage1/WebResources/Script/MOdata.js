@@ -120,6 +120,7 @@ Permobil.OData = {
                 if (this.readyState == 4 /* complete */) {
                     req.onreadystatechange = null;
                     var validStatus = new Array(200, 201, 204, 1223);
+                    
                     if (validStatus.indexOf(this.status) != -1) {
                    // if (_.indexOf(validStatus, this.status) != -1) {
                         switch (action) {
