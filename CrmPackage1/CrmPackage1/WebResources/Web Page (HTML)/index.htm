@@ -33,17 +33,18 @@
         <div class=" yj-balloon-arrow-border"></div>
         <div class="file-upload">
             <!--onkeydown="Permobil.CustomNotes.hoverTitle()" -->
-            <input type="text" data-watermark="Title" title="Title" id="txtNotesName" class="watermark" />
+            <input type="text" placeholder="Title" title="Title" id="txtNotesName" class="transparent" />
 
         </div>
         <div class="file-upload">
-            <input type="text" data-watermark="Enter a note" id="txtDesc" title="Enter a note" class="watermark" />
+            <input type="text" placeholder="Enter a note" id="txtDesc" title="Enter a note" class="transparent" />
 
         </div>
-        <div class="file-attachment" id="uploader">
-            <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button>
+        <div class="file-attachment" id="uploader">         
+             
+            <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button> 
         </div>
-        <div style="margin-top: 10px" id="GridContainer">
+        <div style="margin-top: 10px; margin-left:10px;width:100%" id="GridContainer">
             <table id="notesGrid">
             </table>
         </div>

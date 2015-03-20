@@ -74,6 +74,7 @@ body {
 .file-upload {
     /*border:1px solid #a4c6fd;*/
     background: #ffffff;
+    width: 100%;
 }
 
     .file-upload input {
@@ -107,12 +108,12 @@ body {
 
 .file-attachment {
     background: #f8f8f8;
-    margin: 10px 0 0;
-    bottom: 0;
-    width: 100%;
+    margin: 10px 10px 0;
+    bottom: 0; 
     height: 20px;
     padding: 10px 0;
     font-size: 11px;
+    width: 100% !important;
 }
 
 .attach-btn {
@@ -165,6 +166,7 @@ body {
 
 .fileuploadelement {
     font-size: 11px;
+    margin-left: 10px !important;
 }
 
 .ui-jqgrid tr.ui-row-ltr td {

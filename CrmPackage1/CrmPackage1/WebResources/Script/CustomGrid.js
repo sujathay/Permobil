@@ -145,41 +145,15 @@ Permobil.CustomGrid = {
                 }
             },
             viewrecords: true,
-            width: settings.wd,
+            width: (!settings.wd && settings.wd.length>0) ? settings.wd : null,
             height: settings.ht,
+            autowidth: true,
+            //shrinkToFit: false,
             pagerpos: 'right',
             recordpos: 'left',
             editurl: 'clientArray',
             emptyrecords: "No Notes found.",
-            loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } },
-            //onSelectRow: function (id) {
-            //    var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
-            //    if (gr != null)
-            //        jQuery("#" + settings.gridID).jqGrid('editGridRow', gr, {
-            //            height: 280, reloadAfterSubmit: false,
-            //            editCaption: "Edit Notes",
-            //            processData: "Saving...",
-            //            closeAfterEdit: true,
-            //            beforeShowForm: function (form) {
-            //                $("tr#tr_notes_desc").show();
-            //                $("tr#tr_notes_name").show();
-            //                $("tr#tr_filename").show();
-            //                $("tr#tr_formatted").hide();
-
-            //            },
-            //            afterclickPgButtons: function (whichbutton, form, rowid) {
-            //                $("tr#tr_notes_desc").show();
-            //                $("tr#tr_notes_name").show();
-            //                $("tr#tr_filename").show();
-            //                $("tr#tr_formatted").hide();
-            //            },
-            //            beforeSubmit: function (id) {
-            //                var gr = jQuery("#" + settings.gridID).jqGrid('getGridParam', 'selrow');
-            //                Permobil.CustomNotes.UpdateNotes(id, gr);
-            //                return "1";
-            //            }
-            //        });
-            // }
+            loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } }, 
         });
          
     },
