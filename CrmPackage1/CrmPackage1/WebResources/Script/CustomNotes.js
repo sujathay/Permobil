@@ -13,7 +13,7 @@ Permobil.CustomNotes.CurrentAnnotationID = "";
 Permobil.CustomNotes.CurrentNotesID = "";
 Permobil.CustomNotes.Uploader = "";
 Permobil.CustomNotes.GridUploader = "";
-Permobil.CustomNotes.selectedAccID = "DD8D7040-2FC4-E411-80DF-C4346BADA664";
+Permobil.CustomNotes.selectedAccID = parent.Xrm.Page.data.entity.getId().replace("{","").replace("}","");
 Permobil.CustomNotes.Init = function () {
     /// <signature>
     ///<summary></summary> 
