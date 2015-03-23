@@ -871,6 +871,7 @@ body .ui-tooltip {
 	background: #f6f6f6;
 	font-weight: normal;
 	color: #454545;
+    margin-top: 18px !important;
 }
 .ui-state-default a,
 .ui-state-default a:link,

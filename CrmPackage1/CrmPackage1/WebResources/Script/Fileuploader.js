@@ -76,16 +76,16 @@
             };
 
             reader.onerror = function (event) {
-                FAC.Common.HideBusyIndicator();
+                 
                 console.error("File could not be read! Code " + event.target.error.code);
                 errorCallBack();
             };
 
             reader.readAsDataURL(files[i]);
         } else {
-            FAC.Common.HideBusyIndicator();
-            alert("Please select a file to proceed");
-            errorCallBack();
+            CallBack(null);
+            //alert("Please select a file to proceed");
+           // errorCallBack();
         }
     }
 

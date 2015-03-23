@@ -7,13 +7,11 @@
     <!--<script src="../libs/jquery_1.4.4.min.js"></script>-->
     <link href="../css/jquery_ui_1.7.3.custom.css" rel="stylesheet" type="text/css" />
     <link href="../css/jquery_ui.css" rel="stylesheet" type="text/css" />
-    <!--<link href="../css/redmondTheme.css" rel="stylesheet" type="text/css" />-->
     <link href="../css/NoteManager.css" rel="stylesheet" type="text/css" />
     <script src="../../permobil_jquery172"></script>
     <!--<script src="../../permobil_json2"></script>-->
     <script src="../libs/jquery.confirm.js"></script>
     <script src="../libs/jquery_ui.js"></script>
-    <script src="../libs/WaterMark.js"></script>
     <script src="../js/Common.js"></script>
     <script src="../../permobil_ODATA"></script>
     <script src="../js/MOdata.js"></script>
@@ -33,23 +31,58 @@
         <div class=" yj-balloon-arrow-border"></div>
         <div class="file-upload">
             <!--onkeydown="Permobil.CustomNotes.hoverTitle()" -->
-            <input type="text" placeholder="Title" title="Title" id="txtNotesName" class="transparent" />
+            <input type="text" placeholder="  Title" title="Title" id="txtNotesName" class="transparent" />
 
         </div>
         <div class="file-upload">
-            <input type="text" placeholder="Enter a note" id="txtDesc" title="Enter a note" class="transparent" />
+            <input type="text" placeholder="  Enter a note" id="txtDesc" title="Enter a note" class="transparent" />
 
         </div>
-        <div class="file-attachment" id="uploader">         
-             
-            <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button> 
+        <div class="file-attachment" id="uploader">
+
+            <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button>
         </div>
-        <div style="margin-top: 10px; margin-left:10px;width:100%" id="GridContainer">
+        <div style="margin-top: 10px; margin-left: 10px; width: 100%" id="GridContainer">
             <table id="notesGrid">
             </table>
         </div>
     </div>
-    <div class="upload-container"></div>
-
+   <div   id="ConfirmDeleteFileOverLay" class="ui-widget-overlay" style="display:none;height: 100%; width: 100%; position: fixed; left: 0px; top: 0px; z-index: 949; opacity: 0.3;"></div>
+    <div id="ConfirmDeleteFile" class="ui-widget ui-widget-content ui-corner-all ui-jqdialog jqmID1" 
+         style="display:none; width: 240px; height: auto; z-index: 950; overflow: hidden; top: 136px; left: 22px; ">
+        <div class="ui-jqdialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"  style="cursor: move;">
+            <span class="ui-jqdialog-title" style="float: left;">Delete</span><a href="javascript:void(0)" class="ui-jqdialog-titlebar-close ui-corner-all" style="right: 0.3em;"><span class="ui-icon ui-icon-closethick"></span></a></div>
+        <div class="ui-jqdialog-content ui-widget-content" id="delcntnotesGrid">
+            <div id="DelTbl_notesGrid" class="formdata" style="width: 100%; overflow: auto; position: relative; height: auto;">
+                <table class="DelTable">
+                    <tbody>
+                        <tr id="DelError" style="display: none;">
+                            <td class="ui-state-error"></td>
+                        </tr> 
+                        <tr>
+                            <td class="delmsg" style="white-space: pre;">Are you sure want to delete this file?</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table cellspacing="0" cellpadding="0" border="0" class="EditTable"  >
+                <tbody>
+                    <tr>
+                        <td>
+                            <hr class="ui-widget-content" style="margin: 1px">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="DelButton EditButton"><a href="javascript:void(0)" id="btnDeleteFile" class="submit-btn" onclick="Permobil.CustomNotes.DeleteFiles()">Delete</a>&nbsp;
+                            <a href="javascript:$('#ConfirmDeleteFile').hide();$('#ConfirmDeleteFileOverLay').hide();"  class="submit-btn">Cancel<span class="ui-icon ui-icon-cancel"></span></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="jqResize ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se"></div>
+    </div>
 </body>
 </html>

@@ -150,12 +150,7 @@
     </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\UserRoleCheck.js">
       <DisplayName>UserRoleCheck.js</DisplayName>
-      <UniqueName>permobil_/UserRoleCheck.js</UniqueName>
-      <WebResourceType>Script</WebResourceType>
-    </CRMWebResource>
-    <CRMWebResource Include="WebResources\Script\WaterMark.js">
-      <DisplayName>WaterMark.js</DisplayName>
-      <UniqueName>permobil_/libs/WaterMark.js</UniqueName>
+      <UniqueName>permobil_/js/UserRoleCheck.js</UniqueName>
       <WebResourceType>Script</WebResourceType>
     </CRMWebResource>
     <CRMWebResource Include="WebResources\Web Page %28HTML%29\PM_OpenDocs.htm">

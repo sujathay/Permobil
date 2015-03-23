@@ -140,9 +140,57 @@ Permobil.BusyIndicator = {
             document.getElementById('msgDiv').style.visibility = 'hidden';
     }
 };
+Permobil.ConfirmBox = {
+    __namespace: true,
+    code: '#confirmOverlay{width: 240px;    height: auto;z-index: 950;overflow: hidden;top: 136px;left: 22px;display: block;}#confirmBox{background:#f8fcf8;position:fixed;left:50%;top:50%;margin:-130px 0 0 -230px;box-shadow:0 0 1em #000;border:1px solid #D6D6D6;min-width: 500px;font-family: Segoe UI Light, Segoe UI, Tahoma, Arial;padding:1%;}#confirmBox #confirmClose{display:inline-block;text-align:right;position:absolute;right:1%;top:5%;font-size:16px;cursor:pointer}#confirmBox #confirmClose img{ width:16px;height:16px}#confirmBox h1 span{font-size:12px;color:#666666;font-weight:normal;}#confirmBox h1{font-weight:lighter;font-size:27px;color:#262626;padding:0 30px;line-height: 20px;}#confirmBox p{background:0 0;font-size:11px;line-height:1.4;color:#444444;padding:0 30px;margin-bottom:45px}#confirmButtons{padding:7px 30px 5px 0;text-align:right;background-color:#F7F7F7}#confirmBox .button{display:inline-block;background:#F8F8F8;color:#000;position:relative;height:25px;margin-right:15px;padding:0 5px;width:88px;text-decoration:none;border:1px solid #8f8f8f}#confirmBox .button:hover:enabled{background-color:#B1D6F0}#confirmBox .button:last-child{margin-right:0}#confirmBox .button span{position:absolute;top:0;right:-5px;width:5px;height:33px}#confirmBox .blue{background-position:left top;text-shadow:1px 1px 0 #5889a2}#confirmBox .blue span{background-position:-195px 0}#confirmBox .blue:hover{background-position:left bottom}#confirmBox .blue:hover span{background-position:-195px bottom}#confirmBox .gray{background-position:-200px top;text-shadow:1px 1px 0 #707070}#confirmBox .gray span{background-position:-395px 0}#confirmBox .gray:hover{background-position:-200px bottom}#confirmBox .gray:hover span{background-position:-395px bottom}.progress-label{position:absolute;left:38%;top:4px;font-weight:700;text-shadow:1px 1px 0 #fff}',
+    insertCss: function () {
+        try { 
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            if (style.styleSheet) {
+                // IE
+                style.styleSheet.cssText = this.code.replace('[]', Permobil.Common.getClientUrl() + '/').replace('[]', Permobil.Common.getClientUrl() + '/');
+            } else {
+                // Other browsers
+                style.innerHTML = this.code.replace('[]', Permobil.Common.getClientUrl() + '/').replace('[]', Permobil.Common.getClientUrl() + '/');
+            }
 
-
-
+            document.getElementsByTagName("head")[0].appendChild(style);
+        }
+        catch (e) {
+            console.log(e);
+        }
+    },
+    Show: function (confirmAction, cancelAction, title, message) {
+        
+        Permobil.ConfirmBox.insertCss();
+        $.confirm({
+            'title': title,
+            'message': message,
+            'buttons': {
+                'Delete': {
+                    'class': 'submit-btn',
+                    'text':"Ok",
+                    'action': function () {
+                        $('div').attr('class', 'ui-widget-overlay')
+                        $('#Activateconfirm').attr('disabled', 'disabled').css('border', '1px solid rgb(172, 172, 172)');
+                        $('#confirmBox p').html('<div id="progressbar"><div class="progress-label"></div></div>');
+                        $.confirm.hide();
+                        confirmAction();
+                    }
+                },
+                'Cancel': {
+                    'class': 'submit-btn',
+                    'text': "Cancel",
+                    'action': function () {
+                        $.confirm.hide();
+                        cancelAction();
+                    }
+                }
+            }
+        });
+    }
+};
 String.format = function () {
     var s = arguments[0];
     for (var i = 0; i < arguments.length - 1; i++) {
@@ -153,29 +201,4 @@ String.format = function () {
     return s;
 }
 
-Permobil.Lightbox = {
-    _namespace: true,
-    Show: function () {
-        var width = $(window).width() + 'px';
-        var height = $(window).height() + 'px';
-        if (document.getElementById('lightboxDiv') == undefined) {
-            var newdiv = $('<div>', { 'id': "lightboxDiv", 'style': 'background:none 0px 0px repeat scroll rgba(54, 51, 51, 0.25);font-size:15px;z-index:1010;position:absolute;width:' + width + ';height:' + height });
-            //            newdiv.valign = "middle";
-            //            newdiv.align = "center";
-            var divInnerHTML = "<table style='left:40%;top:45%;position:relative;'>";
-            divInnerHTML += "<tr>";
-            divInnerHTML += "<td>";
-            divInnerHTML += "<img alt='loading' src='/_imgs/AdvFind/progress.gif'/>";
-            divInnerHTML += "<div>Loading…</div>";
-            divInnerHTML += "</td></tr></table>";
-            newdiv.append(divInnerHTML);
-            $(document).find('body').prepend(newdiv);
-        }
-        $('#lightboxDiv').css('width', width).css('height', height);
-        document.getElementById('lightboxDiv').style.display = 'block';
-    },
-    Hide: function () {
-        if (document.getElementById('lightboxDiv') != undefined)
-            document.getElementById('lightboxDiv').style.display = 'none';
-    }
-};
+ 

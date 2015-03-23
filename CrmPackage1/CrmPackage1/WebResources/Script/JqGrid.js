@@ -1889,7 +1889,8 @@ $.fn.jqGrid = function( pin ) {
 		},
 		setPager = function (pgid, tp){
 			// TBD - consider escaping pgid with pgid = $.jgrid.jqID(pgid);
-			var sep = "<td class='ui-pg-button ui-state-disabled' style='width:4px;'><span class='ui-separator'></span></td>",
+		    //var sep = "<td class='ui-pg-button ui-state-disabled' style='width:4px;'><span class='ui-separator'></span></td>",
+		    var sep = "<td class='ui-pg-button ui-state-disabled' style='width:4px;'></td>",
 			pginp = "",
 			pgl="<table cellspacing='0' cellpadding='0' border='0' style='table-layout:auto;' class='ui-pg-table'><tbody><tr>",
 			str="", pgcnt, lft, cent, rgt, twd, tdw, i,

@@ -1,35 +1,27 @@
 ﻿
 body {
-    font-family:Segoe UI, Tahoma, Arial;
+    font-family: Segoe UI, Tahoma, Arial;
 }
+
 .upload-container {
-    width: 60%;
-    /*font-family: Arial, Helvetica, sans-serif;*/
+    width: 95%; 
     font-size: 12px;
 }
+
 .upload-container2 {
-    width: 40%;
-    /*font-family: Arial, Helvetica, sans-serif;*/
+    width: 40%; 
     font-size: 12px;
 }
 
-    .upload-container h2 {
-        color: #333;
-        font-size: 14px;
-        font-weight: 700;
-        margin: 0;
-        padding: 0;
-        height: 5px;
-    }
-
-.watermark {
-    opacity: 0.1;
-    /*position: absolute;
-    font-size: 3em;
-    width: 100%;
-    text-align: center;
-    z-index: 1000;*/
+.upload-container h2 {
+    color: #333;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 12px 0 0 0;
+    padding: 0;
+    height: 5px;
 }
+
 
 .links {
     cursor: pointer;
@@ -78,10 +70,11 @@ body {
 }
 
     .file-upload input {
-        margin: 10px;
+        font-size: 11px;
+        line-height: 2em;
+        margin: 0;
         padding: 5px;
         width: 100%;
-        font-size: 11px;
     }
 
 .transparent {
@@ -109,7 +102,7 @@ body {
 .file-attachment {
     background: #f8f8f8;
     margin: 10px 10px 0;
-    bottom: 0; 
+    bottom: 0;
     height: 20px;
     padding: 10px 0;
     font-size: 11px;
@@ -173,6 +166,8 @@ body {
     border-bottom-style: none;
     border-right-style: none;
     height: 40px;
+    vertical-align: middle;
+    padding-top: 6px;
 }
 
 .ui-state-highlight {
