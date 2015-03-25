@@ -1,24 +1,55 @@
 ﻿//Check login User has 'System Administrator'/sales manager role
 function CheckUserRole() {
-    var currentUserRoles = Xrm.Page.context.getUserRoles();
-    var notesPrivelegeRoles = GetNotesPrivelegeRole();
-    var isEligible = false;
-    for (var i = 0; i < currentUserRoles.length; i++) {       
-        var userRoleId = currentUserRoles[i];
-        var userRoleName = GetLoggedUserRoleName(userRoleId);
-        if (!isEligible) {
-            if (notesPrivelegeRoles && notesPrivelegeRoles.toLowerCase().indexOf(userRoleName.toLowerCase()) > -1) {
-                Xrm.Page.ui.tabs.get("SUMMARY_TAB").sections.get("CustomNoteTab").setVisible(true);
-                isEligible = true;
+    try{
+        ShowLoading();
+        var currentUserRoles = Xrm.Page.context.getUserRoles();
+        var notesPrivelegeRoles = GetNotesPrivelegeRole();
+        var isEligible = false;
+        for (var i = 0; i < currentUserRoles.length; i++) {       
+            var userRoleId = currentUserRoles[i];
+            var userRoleName = GetLoggedUserRoleName(userRoleId);
+            if (!isEligible) {
+                if (notesPrivelegeRoles && notesPrivelegeRoles.toLowerCase().indexOf(userRoleName.toLowerCase()) > -1) {
+                    Xrm.Page.ui.tabs.get("SUMMARY_TAB").sections.get("CustomNoteTab").setVisible(true);
+                    isEligible = true;
+                    HideLoading();
+                }
+                else {
+                    Xrm.Page.ui.tabs.get("SUMMARY_TAB").sections.get("CustomNoteTab").setVisible(false);
+                    isEligible = false;
+                    HideLoading();
+                }
             }
-            else {
-                Xrm.Page.ui.tabs.get("SUMMARY_TAB").sections.get("CustomNoteTab").setVisible(false);
-                isEligible = false;
-            }
-        }
 
+        }}
+    catch (ex)
+    {
+        HideLoading();
+        console.log(ex);
     }
 
+}
+ function ShowLoading() {
+    if (document.getElementById('msgDiv') == undefined) {
+        var newdiv = document.createElement('div');
+        newdiv.setAttribute('id', "msgDiv"); 
+        var divInnerHTML = "<table style='cursor:wait'>";
+        divInnerHTML += "<tr>";
+        divInnerHTML += "<td>";
+        divInnerHTML += "<img alt='loading' src='/_imgs/AdvFind/progress.gif'/>";
+        divInnerHTML += "<div/>Loading…";
+        divInnerHTML += "</td></tr></table>";
+        newdiv.innerHTML = divInnerHTML; 
+        newdiv.style.fontSize = "15px";
+        newdiv.style.zIndex = "1010"; 
+        newdiv.style.position = 'absolute';
+        document.body.insertBefore(newdiv, document.body.firstChild);
+    }
+    document.getElementById('msgDiv').style.visibility = 'visible';
+}
+ function HideLoading() {
+    if (document.getElementById('msgDiv') != undefined)
+        document.getElementById('msgDiv').style.visibility = 'hidden';
 }
 
 //Get Rolename based on RoleId

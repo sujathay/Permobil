@@ -61,7 +61,7 @@ Permobil.CustomNotes.formatGridDisplay = function (cellvalue, options, rowObject
 Permobil.CustomNotes.DeleteFile = function (annotation) {
     Permobil.CustomNotes.FiletobeDeleted = annotation;
     $("#ConfirmDeleteFileOverLay").show();
-    $("#ConfirmDeleteFile").show(); 
+    $("#ConfirmDeleteFile").show();
 }
 Permobil.CustomNotes.DeleteFiles = function () {
     $("#ConfirmDeleteFile").hide();
@@ -115,7 +115,7 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
                     }
                 },
                 { name: 'notes_name', hidden: true, editable: true },
-                { name: 'notes_desc', hidden: true, editable: true },
+                { name: 'notes_desc', hidden: true, editable: true, edittype: 'textarea', editoptions: { rows: "5", cols: "10" } },
                 { name: 'notes_id', hidden: true },
                 { name: 'modifiedby', hidden: true },
                 { name: 'modifiedon', hidden: true },
@@ -127,10 +127,8 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
             ht: auto,
             width: null,
             shrinkToFit: false,
-            //shrinkToFit: true, 
-            //autowidth: true,
             dataSource: data,
-            PageSize: 10,
+            PageSize: 5,
             sortBy: 'permobil_name',
             isDesc: false,
             RefreshGridHandler: Permobil.CustomNotes.GetNotes,
@@ -153,12 +151,14 @@ Permobil.CustomNotes.OpenEditForm = function () {
     var gr = jQuery("#notesGrid").jqGrid('getGridParam', 'selrow');
     if (gr != null)
         jQuery("#notesGrid").jqGrid('editGridRow', gr, {
-            height: 150, reloadAfterSubmit: false,
+            height: 225,
+            width: 425,
+            reloadAfterSubmit: false,
             editCaption: "Edit Notes",
             recreateForm: true,
             processData: "Saving...",
             closeAfterEdit: true,
-            beforeShowForm: function (form) {              
+            beforeShowForm: function (form) {
 
                 var gridUploaderID = 'tdGridUploader' + $("#id_g").val();
                 $('<tr style="" rowpos="3" class="FormData" id="tr_filename"><td class="CaptionTD"></td><td id="' + gridUploaderID + '" class="DataTD"> </td></tr>')
@@ -226,7 +226,7 @@ Permobil.CustomNotes.openUserPage = function (userid) {
     /// <summary>open CRM user view</summary>   
     /// <param name="userid" type="string">Last modified userid</param> 
     try {
-        window.open(Permobil.Common.getClientUrl() + '/main.aspx?etn=systemuser&extraqs=&histKey=647827476&id={' + userid.id + '}&newWindow=true&pagetype=entityrecord', '', 'status=0,resizable=1,width=1000px,height=600px');
+        window.parent.parent.Xrm.Utility.openEntityForm("systemuser", userid.id);
     } catch (ex) {
         console.log(ex);
     }
@@ -423,21 +423,4 @@ $(document).ready(function () {
         $('head').append('<meta http-equiv=X-UA-Compatible content="IE=10"/>');
     Permobil.CustomNotes.Uploader = new FileAppender("uploader", {}, function (Data) { console.log(Data) });
     Permobil.CustomNotes.Init();
-    //$(":input[data-watermark]").each(function () {
-    //    $(this).val($(this).attr("data-watermark"));
-    //    $(this).css("color", "#a8a8a8");
-    //    $(this).bind("focus", function () {
-    //        if ($(this).val() == $(this).attr("data-watermark")) $(this).val('');
-    //        $(this).css("color", "#000000");
-    //    });
-    //    $(this).bind("blur", function () {
-    //        if ($(this).val() == '') {
-    //            $(this).val($(this).attr("data-watermark"));
-    //            $(this).css("color", "#a8a8a8");
-    //        }
-    //        else {
-    //            $(this).css("color", "#000000");
-    //        }
-    //    });
-    //});
 });

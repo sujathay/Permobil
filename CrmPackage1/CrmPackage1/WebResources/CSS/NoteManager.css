@@ -4,12 +4,12 @@ body {
 }
 
 .upload-container {
-    width: 95%; 
+    width: 95%;
     font-size: 12px;
 }
 
 .upload-container2 {
-    width: 40%; 
+    width: 40%;
     font-size: 12px;
 }
 
@@ -48,6 +48,7 @@ body {
     padding: 5px 0;
     font-size: 12px;
     font-weight: normal;
+    word-wrap: break-word;
 }
 
 .ui-widget-content .jqgrow .ui-row-ltr {
@@ -75,6 +76,15 @@ body {
         margin: 0;
         padding: 5px;
         width: 100%;
+    }
+
+    .file-upload textarea {
+        font-size: 11px;
+        line-height: 2em;
+        margin: 0;
+        padding: 5px;
+        width: 100%;
+        font-family: Segoe UI, Tahoma, Arial;
     }
 
 .transparent {
@@ -193,4 +203,14 @@ body {
 
 .deleteicon {
     background-image: url(../img/delete.png);
+}
+
+table.EditTable > tbody > tr.FormData > td.DataTD > input[type="text"] {
+    width: 95% !important;
+}
+
+table.EditTable > tbody > tr.FormData > td.DataTD > select, 
+table.EditTable > tbody > tr.FormData > td.DataTD > input, 
+table.EditTable > tbody > tr.FormData > td.DataTD > textarea {
+    width: 95.8% !important;
 }
