@@ -22,7 +22,8 @@ Permobil.CustomGrid = {
             customActionObj: '',
             fetchQuery: '',
             gridCompleted: null,
-            onRowDelete: null
+            onRowDelete: null,
+            onSelectRow:null
         }
         var settings = $.extend(defaults, options);
         settings.PagerId = 'pgr_' + settings.gridID;
@@ -110,7 +111,8 @@ Permobil.CustomGrid = {
             data: settings.dataSource.data,
             colNames: settings.dataSource.colNames,
             colModel: settings.dataSource.colModel,
-            pager: '#' + settings.PagerId,
+            pager: '#' + settings.PagerId, 
+            hoverrows: false,
             jsonReader: {
                 cell: "",
                 subgrid: {
@@ -119,8 +121,16 @@ Permobil.CustomGrid = {
                     cell: "cell"
                 }
             },
-            success:function(response){ $("#myjqgrid").jqGrid('navGrid','#Pager');
-                $("#myjqgrid").jqGrid('gridResize',{minWidth:800,maxWidth:1405,minHeight:350,maxHeight:680});},
+            loadonce: false,
+            localReader: {
+                page: function (obj) {
+                    return (obj.page && obj.page.length>0) ? obj.page : "0";
+                }
+            },
+            success: function (response) {
+                //$("#" + settings.gridID).jqGrid('navGrid', "#pgr_" + settings.gridID);
+                //$("#" + settings.gridID).jqGrid('gridResize', { minWidth: 800, maxWidth: 1405, minHeight: 350, maxHeight: 680 });
+            },
             rowNum: settings.PageSize,
             pginput: true,
             sortname: settings.sortBy,
@@ -139,20 +149,27 @@ Permobil.CustomGrid = {
                 $("#" + subgrid_id).html(subdata);
             },
             ondblClickRow: function (rowid, iRow, iCol, e) {
-                if (settings.rowDoubleClickHandler) {
-                   // var data = grid.getRowData(rowid);
+                if (settings.rowDoubleClickHandler) { 
                     settings.rowDoubleClickHandler(rowid);
                 }
+            },
+            beforeSelectRow: function (rowid, e) {
+
+                return true;
+            },
+            onSelectRow: function (rowid, iRow, iCol, e) {
+                if ((iCol && iCol.target && iCol.target.src) || (iCol && iCol.target && iCol.target.tagName.toLowerCase() == "span"))
+                { return false; }
+                else { settings.onSelectRow(rowid); }
             },
             viewrecords: true,
             width: (!settings.wd && settings.wd.length>0) ? settings.wd : null,
             height: settings.ht,
-            autowidth: true,
-            //shrinkToFit: false,
+            autowidth: true, 
             pagerpos: 'right',
             recordpos: 'left',
             editurl: 'clientArray',
-            emptyrecords: "No Notes found.",
+            emptyrecords: "No Notes found.",            
             loadComplete: function (grid) { if (settings.gridCompleted) { settings.gridCompleted($("#" + settings.gridID)); } }, 
         });
          

@@ -19,7 +19,7 @@ body {
     font-weight: 700;
     margin: 12px 0 0 0;
     padding: 0;
-    height: 5px;
+    word-wrap: break-word;
 }
 
 
@@ -64,10 +64,10 @@ body {
     color: #777;
 }
 
-.file-upload {
-    /*border:1px solid #a4c6fd;*/
+.file-upload { 
     background: #ffffff;
-    width: 100%;
+    width: 93%;
+    margin-top: 1%;
 }
 
     .file-upload input {
@@ -75,13 +75,20 @@ body {
         line-height: 2em;
         margin: 0;
         padding: 5px;
+        margin-left:2%;
         width: 100%;
+        border: 0px solid;
     }
+#editmodnotesGrid {
+    border: 1px solid;
+}
 
     .file-upload textarea {
+        border: 0px solid;
         font-size: 11px;
         line-height: 2em;
         margin: 0;
+        margin-left:0px 0px 2% 2%;
         padding: 5px;
         width: 100%;
         font-family: Segoe UI, Tahoma, Arial;
@@ -91,9 +98,13 @@ body {
     background-color: transparent;
     border: 0px solid;
     cursor: pointer;
+     font-family: Segoe UI, Tahoma, Arial;
 }
 
 .file-upload input:focus {
+    border: 1px solid #a4c6fd;
+}
+.file-upload textarea:focus {
     border: 1px solid #a4c6fd;
 }
 

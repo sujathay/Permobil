@@ -25,19 +25,18 @@
     <script src="../js/Fileuploader.js"></script>
 </head>
 
-<body>
-    <!-- onfocus="if(this.value == 'Description') { this.value = ''; }"-->
+<body> 
     <div class="upload-container">
         <div class=" yj-balloon-arrow-border"></div>
-        <div class="file-upload">
-            <!--onkeydown="Permobil.CustomNotes.hoverTitle()" -->
-            <input type="text" placeholder="  Title" title="Title" id="txtNotesName" class="transparent" />
-
+        <div style="border:1px solid #a4c6fd">
+        <div class="file-upload"> 
+            <input type="text" placeholder="  Title" title="Title" id="txtNotesName" maxlength="1000" class="transparent" />
         </div>
         <div class="file-upload">
-            <textarea rows="4" cols="50" placeholder="  Enter a note" id="txtDesc" class="transparent" ></textarea>
+            <textarea rows="4" cols="50" placeholder="  Enter a note" id="txtDesc" maxlength="1000"  class="transparent" ></textarea>
 
         </div>
+            </div>
         <div class="file-attachment" id="uploader">
 
             <button class="submit-btn" onclick="Permobil.CustomNotes.Save()">Done</button>

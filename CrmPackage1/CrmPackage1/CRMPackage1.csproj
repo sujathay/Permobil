@@ -78,6 +78,16 @@
       <UniqueName>permobil_/img/delete.png</UniqueName>
       <WebResourceType>PNG</WebResourceType>
     </CRMWebResource>
+    <CRMWebResource Include="WebResources\images\ui-icons_444444_256x240.png">
+      <DisplayName>ui_icons_444444_256x240.png</DisplayName>
+      <UniqueName>permobil_/img/ui_icons_444444_256x240.png</UniqueName>
+      <WebResourceType>PNG</WebResourceType>
+    </CRMWebResource>
+    <CRMWebResource Include="WebResources\images\ui-icons_777777_256x240.png">
+      <DisplayName>ui-icons_777777_256x240.png</DisplayName>
+      <UniqueName>permobil_/img/ui_icons_777777_256x240.png</UniqueName>
+      <WebResourceType>PNG</WebResourceType>
+    </CRMWebResource>
     <CRMWebResource Include="WebResources\Script\Common.js">
       <DisplayName>Common.js</DisplayName>
       <UniqueName>permobil_/js/Common.js</UniqueName>
