@@ -89,6 +89,9 @@ Permobil.CustomNotes.DownloadAttachment = function (file) {
         alert(ex);
     }
 }
+Permobil.CustomNotes.CloseAlert = function () {
+    $('#ConfirmDeleteFile').hide(); $('#ConfirmDeleteFileOverLay').hide();
+}
 Permobil.CustomNotes.GetNotesSuccess = function success() {
     try {
         var data = {
@@ -119,7 +122,10 @@ Permobil.CustomNotes.GetNotesSuccess = function success() {
                             beforeSubmit: function (id) {
                                 Permobil.CustomNotes.Delete(id);
                                 $('.ui-icon-closethick').trigger('click');
-                                //return "1";
+                                return "1";
+                            },
+                            afterSubmit: function(data){
+                                $(".ui-icon-closethick").trigger('click');
                             }
                         }
                     }
@@ -166,11 +172,14 @@ Permobil.CustomNotes.OpenEditForm = function () {
         var gr = jQuery("#notesGrid").jqGrid('getGridParam', 'selrow');
         if (gr != null)
             jQuery("#notesGrid").jqGrid('editGridRow', gr, {
-                //reloadAfterSubmit: false,
+                reloadAfterSubmit: false,
                 editCaption: "Edit Notes",
                 recreateForm: true,
                 processData: "Saving...",
-                //closeAfterEdit: true,
+                ondblClickRow: function () {
+                    return false;
+                },
+                closeAfterEdit: true,
                 beforeShowForm: function (form) {
                     var gridUploaderID = 'tdGridUploader' + $("#id_g").val();
                     $('<tr style="" rowpos="3" class="FormData" id="tr_filename"><td class="CaptionTD"></td><td id="' + gridUploaderID + '" class="DataTD"> </td></tr>')
@@ -228,8 +237,9 @@ Permobil.CustomNotes.Delete = function (id) {
                 Permobil.OData.deleteRecord(Rowdata.annotationid, Permobil.Settings.ANNOTATION_ENTITY, function () {
                     Permobil.CustomNotes.GetNotes();
                 }, function (err) {
-                    Permobil.BusyIndicator.Hide();
-                    console.log(err);
+                    Permobil.CustomNotes.GetNotes();
+                    //Permobil.BusyIndicator.Hide();
+                    //console.log(err);
                 });
             }
             else { Permobil.CustomNotes.GetNotes(); console.log("ther is no file to delete"); }

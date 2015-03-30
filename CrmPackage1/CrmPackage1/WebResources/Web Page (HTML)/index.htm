@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td class="DelButton EditButton"><a href="javascript:void(0)" id="btnDeleteFile" class="submit-btn" onclick="Permobil.CustomNotes.DeleteFiles()">Delete</a>&nbsp;
-                            <a href="javascript:$('#ConfirmDeleteFile').hide();$('#ConfirmDeleteFileOverLay').hide();"  class="submit-btn">Cancel<span class="ui-icon ui-icon-cancel"></span></a></td>
+                            <a href="javascript:void(0)" onclick="Permobil.CustomNotes.CloseAlert();"  class="submit-btn">Cancel<span class="ui-icon ui-icon-cancel"></span></a></td>
                     </tr>
                 </tbody>
             </table>
@@ -84,4 +84,5 @@
         <div class="jqResize ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se"></div>
     </div>
 </body>
+   
 </html>

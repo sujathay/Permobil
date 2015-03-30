@@ -67,46 +67,10 @@ Permobil.CustomGrid = {
         Permobil.CustomGrid.GridID = settings.gridID;
         var myData = settings.dataSource;
         grid.jqGrid('GridUnload'); // to clear off the grid if it already exist.
-        grid = $("#" + settings.gridID); // Note: this is required after gridUnload as the table(container element) is recreated. Hence, the reference needs to be updated.
-        function imageFormatter(cellValue, options, cell) {
-            try {
-                var imgName = '';
-                var altName = '';
-                switch (cellValue) {
-                    case '555860001':
-                        imgName = altName = 'info';
-                        break;
-                    case '555860002':
-                        imgName = altName = 'warning';
-                        break;
-                    case '555860003':
-                        imgName = altName = 'alert';
-                        break;
-                    default:
-
-                }
-                return ' <img alt="' + altName + '" src="../img/' + imgName + '.gif" />';
-            } catch (e) {
-                Permobil.RE.Common.LogException(e);
-            }
-        }
-
-        Permobil.TextFormatter = function (cellValue, options, cell) {
-            try {
-                var text = '';
-                if (cell['Permobil_expires'] == 'false') {
-                    text = "Never";
-                }
-                else {
-                    text = cellValue;
-                }
-                return '<span>' + text + '</span>';
-            } catch (e) {
-                Permobil.RE.Common.LogException(e);
-            }
-        }
-
+        grid = $("#" + settings.gridID); // Note: this is required after gridUnload as the table(container element) is recreated. Hence, the reference needs to be updated. 
         grid.jqGrid({
+            closeAfterEdit:true,
+            recreateForm:true,
             datatype: "local",
             data: settings.dataSource.data,
             colNames: settings.dataSource.colNames,
@@ -154,7 +118,6 @@ Permobil.CustomGrid = {
                 }
             },
             beforeSelectRow: function (rowid, e) {
-
                 return true;
             },
             onSelectRow: function (rowid, iRow, iCol, e) {
@@ -187,37 +150,7 @@ Permobil.CustomGrid = {
     },
     SelectedRowID: function () {
         return $("#" + Permobil.CustomGrid.GridID).jqGrid('getGridParam', 'selrow');
-    },
-    //ConfirmationBox: function (confirmAction, cancelAction) {
-
-    //    //Permobil.ConfirmBox.insertCss();
-    //    $.confirm({
-    //        'title': "ConfirmDeletion" ,
-    //        'message':  "Are you sure want to delte this note?" ,
-    //        'buttons': {
-    //            'Delete': {
-    //                'class': 'blue',
-    //                'text': "OK",
-    //                'action': function () {
-    //                    $('#Activateconfirm').attr('disabled', 'disabled').css('color', 'rgb(161, 163, 161)').css('border', '1px solid rgb(172, 172, 172)');
-    //                    $('#confirmBox p').html('<div id="progressbar"><div class="progress-label"></div></div>');
-    //                    $.confirm.hide();
-    //                    confirmAction();
-    //                }
-    //            },
-    //            'Cancel': {
-    //                'class': 'gray',
-    //                'text': "Cancel",
-    //                'action': function () {
-    //                    $.confirm.hide();
-    //                    cancelAction();
-    //                } // Nothing to do in this case. You can as well omit the action property.
-    //            }
-    //        }
-    //    });
-    //},
+    }, 
     Load: function ()
     { }
-}
-
-//$(document).bind("OnReady", Load);
+} 
