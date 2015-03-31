@@ -147,6 +147,25 @@ body {
     background-color: #d7ebf9;
     cursor: pointer;
 }
+.submit-btns:hover {
+    background-color: #d7ebf9;
+    cursor: pointer;
+}
+.submit-btns {
+    background: #FDFDFD;
+    border: 1px solid #c6c6c6;
+    text-align: center;
+    margin-top: 2px;
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 0!important;
+    text-decoration: none;
+    min-width: 60px; 
+    height: 20px;
+    width: auto;
+    font-size: 11px;
+}
 
 .submit-btn {
     background: #FDFDFD;
@@ -159,6 +178,7 @@ body {
     border-radius: 0!important;
     text-decoration: none;
     min-width: 60px;
+    line-height: 20px;
     height: 20px;
     width: auto;
     font-size: 11px;
