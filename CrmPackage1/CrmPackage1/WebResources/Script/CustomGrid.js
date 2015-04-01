@@ -118,9 +118,11 @@ Permobil.CustomGrid = {
                     repeatitems: true,
                     cell: "cell"
                 }
+            }, 
+            success: function (response) {
+                //$("#myjqgrid").jqGrid('navGrid', '#Pager');
+                //$("#myjqgrid").jqGrid('gridResize',{minWidth:800,maxWidth:1405,minHeight:350,maxHeight:680});
             },
-            success:function(response){ $("#myjqgrid").jqGrid('navGrid','#Pager');
-                $("#myjqgrid").jqGrid('gridResize',{minWidth:800,maxWidth:1405,minHeight:350,maxHeight:680});},
             rowNum: settings.PageSize,
             pginput: true,
             sortname: settings.sortBy,
@@ -175,35 +177,7 @@ Permobil.CustomGrid = {
     },
     SelectedRowID: function () {
         return $("#" + Permobil.CustomGrid.GridID).jqGrid('getGridParam', 'selrow');
-    },
-    //ConfirmationBox: function (confirmAction, cancelAction) {
-
-    //    //Permobil.ConfirmBox.insertCss();
-    //    $.confirm({
-    //        'title': "ConfirmDeletion" ,
-    //        'message':  "Are you sure want to delte this note?" ,
-    //        'buttons': {
-    //            'Delete': {
-    //                'class': 'blue',
-    //                'text': "OK",
-    //                'action': function () {
-    //                    $('#Activateconfirm').attr('disabled', 'disabled').css('color', 'rgb(161, 163, 161)').css('border', '1px solid rgb(172, 172, 172)');
-    //                    $('#confirmBox p').html('<div id="progressbar"><div class="progress-label"></div></div>');
-    //                    $.confirm.hide();
-    //                    confirmAction();
-    //                }
-    //            },
-    //            'Cancel': {
-    //                'class': 'gray',
-    //                'text': "Cancel",
-    //                'action': function () {
-    //                    $.confirm.hide();
-    //                    cancelAction();
-    //                } // Nothing to do in this case. You can as well omit the action property.
-    //            }
-    //        }
-    //    });
-    //},
+    }, 
     Load: function ()
     { }
 }

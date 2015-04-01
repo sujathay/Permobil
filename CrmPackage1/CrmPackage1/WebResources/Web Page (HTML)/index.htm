@@ -50,7 +50,7 @@
     <div id="ConfirmDeleteFile" class="ui-widget ui-widget-content ui-corner-all ui-jqdialog jqmID1" 
          style="display:none; width: 240px; height: auto; z-index: 950; overflow: hidden; top: 136px; left: 22px; ">
         <div class="ui-jqdialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"  style="cursor: move;">
-            <span class="ui-jqdialog-title" style="float: left;">Delete</span><a href="javascript:void(0)" class="ui-jqdialog-titlebar-close ui-corner-all" style="right: 0.3em;"><span class="ui-icon ui-icon-closethick"></span></a></div>
+            <span class="ui-jqdialog-title" style="float: left;">Delete</span><a href="javascript:void(0)" onclick="Permobil.CustomNotes.CloseAlert()"  class="ui-jqdialog-titlebar-close ui-corner-all" style="right: 0.3em;"><span class="ui-icon ui-icon-closethick"></span></a></div>
         <div class="ui-jqdialog-content ui-widget-content" id="delcntnotesGrid">
             <div id="DelTbl_notesGrid" class="formdata" style="width: 100%; overflow: auto; position: relative; height: auto;">
                 <table class="DelTable">
@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td class="DelButton EditButton"><a href="javascript:void(0)" id="btnDeleteFile" class="submit-btn" onclick="Permobil.CustomNotes.DeleteFiles()">Delete</a>&nbsp;
-                            <a href="javascript:void(0)" onclick="Permobil.CustomNotes.CloseAlert();"  class="submit-btn">Cancel<span class="ui-icon ui-icon-cancel"></span></a></td>
+                            <a href="javascript:void(0)" onclick="Permobil.CustomNotes.CloseAlert()"  class="submit-btn">Cancel<span class="ui-icon ui-icon-cancel"></span></a></td>
                     </tr>
                 </tbody>
             </table>
