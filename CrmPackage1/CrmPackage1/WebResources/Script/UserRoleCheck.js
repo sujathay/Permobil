@@ -34,7 +34,7 @@ function CheckUserRole() {
     if (document.getElementById('msgDiv') == undefined) {
         var newdiv = document.createElement('div');
         newdiv.setAttribute('id', "msgDiv"); 
-        var divInnerHTML = "<table style='cursor:wait;height:100%;width:100%;background-color:FFFFFF'>";
+        var divInnerHTML = "<table style='cursor:wait;height:100%;width:100%; background-color:FFFFFF'>";
         divInnerHTML += "<tr>";
         divInnerHTML += "<td style='vertical-align: middle' align='center'>";
         divInnerHTML += "<img alt='loading' src='/_imgs/AdvFind/progress.gif'/>";
@@ -44,6 +44,7 @@ function CheckUserRole() {
         newdiv.style.fontSize = "15px";
         newdiv.style.zIndex = "1010"; 
         newdiv.style.position = 'absolute';
+        newdiv.style.width = '100%';
         document.body.insertBefore(newdiv, document.body.firstChild);
     }
    // <div style="width: 100%; height: 100%; position: absolute; display: none;"> 
